@@ -1,9 +1,9 @@
-title: Hacker-Blog
+title: Chobits-Blog
 description: "A Jekyll Blog Theme For Hackers"
 author:
-  name: "SomeHacker"
-  email: "someone@somewebsite.somedomain"
-  url: "https://ashishchaudhary.in/hacker-blog"
+  name: "echoDetected"
+  email: "youki1374076342@163.com"
+  url: "https://www.cnblogs.com/echoDetected/"
 
 baseurl: /
 
@@ -28,5 +28,5 @@ plugins:
   - jekyll-sitemap
 
 # Custom variables
-owner : "SomeHacker"
+owner : "echoDetected"
 year : "2020"
