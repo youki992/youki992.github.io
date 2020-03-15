@@ -3,4 +3,4 @@ layout: page
 title: About
 ---
 
-Something about me.
+Someone in red hat
