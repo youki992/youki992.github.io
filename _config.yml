@@ -1,8 +1,8 @@
 title: Chobits-Blog
 description: "A Jekyll Blog Theme For Hackers"
 author:
-  name: "echoDetected"
-  email: "youki1374076342@163.com"
+  name: "油漆"
+  email: ""
   url: "https://www.cnblogs.com/echoDetected/"
 
 baseurl: /
@@ -28,5 +28,5 @@ plugins:
   - jekyll-sitemap
 
 # Custom variables
-owner : "echoDetected"
-year : "2020"
+owner : "油漆"
+year : "2022"
