@@ -30,3 +30,5 @@ plugins:
 # Custom variables
 owner : "油漆"
 year : "2022"
+
+theme: jekyll-theme-midnight
