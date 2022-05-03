@@ -46,4 +46,3 @@ Content-Disposition: form-data; name="uploaded";filename="11.php，上传绕过�
 查看安全狗记录是检测文件头的样子，直接在图片数据后面插入一句话+文件后缀绕过
 ![](https://github.com/youki992/youki992.github.io/raw/master/_posts/picture/10.png)
 ![](https://github.com/youki992/youki992.github.io/raw/master/_posts/picture/11.jpg)
-![](https://github.com/youki992/youki992.github.io/raw/master/_posts/picture/12.png)
