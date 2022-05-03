@@ -35,6 +35,7 @@ Content-Disposition: form-data; name="uploaded";filename="11.php，上传绕过�
 > h
 > 
 > p
+
 ![](https://github.com/youki992/youki992.github.io/raw/master/_posts/picture/7.jpg)
 后缀检测的话chunk编码也能绕过
 ## 文件内容的绕过
