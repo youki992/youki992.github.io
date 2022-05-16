@@ -5,7 +5,7 @@ Fastjson算是RCE最常碰到的漏洞了，但是除了利用外对其知之甚
 
 首先初始exp类似于这样：
 
-[![OfYebV.jpg](https://s1.ax1x.com/2022/05/16/OfYebV.jpg)](https://imgtu.com/i/OfYebV)
+[![OfYuUU.jpg](https://s1.ax1x.com/2022/05/16/OfYuUU.jpg)](https://imgtu.com/i/OfYuUU)
 
 ## 1.空白字符绕过
 
@@ -48,7 +48,7 @@ FastJson中有个默认的Feature是开启的 AllowArbitraryCommas ，这允许�
 
 添加的位置在键值对两边，在冒号两边添加会出错
 
-[![OfYVuq.jpg](https://s1.ax1x.com/2022/05/16/OfYVuq.jpg)](https://imgtu.com/i/OfYVuq)
+[![OfYebV.jpg](https://s1.ax1x.com/2022/05/16/OfYebV.jpg)](https://imgtu.com/i/OfYebV)
 
 ## 3.字段名不加引号
 
@@ -66,7 +66,7 @@ FastJson中有个默认的Feature是开启的 AllowArbitraryCommas ，这允许�
 > 
 > {"zeo":{"@type":"java.net.Inet4Address",val:"r.qsu9q8.ceye.io"}}
 
-[![OfYuUU.jpg](https://s1.ax1x.com/2022/05/16/OfYuUU.jpg)](https://imgtu.com/i/OfYuUU)
+[![OfYZD0.jpg](https://s1.ax1x.com/2022/05/16/OfYZD0.jpg)](https://imgtu.com/i/OfYZD0)
 
 ## 4. @type后的值第⼀个引号可以替换为其他字符
 
@@ -74,7 +74,7 @@ FastJson中有个默认的Feature是开启的 AllowArbitraryCommas ，这允许�
 
 因此替换引号为任意字符即可正常执行
 
-[![OfYnET.jpg](https://s1.ax1x.com/2022/05/16/OfYnET.jpg)](https://imgtu.com/i/OfYnET)
+[![OfYVuq.jpg](https://s1.ax1x.com/2022/05/16/OfYVuq.jpg)](https://imgtu.com/i/OfYVuq)
 
 ## 5.编码绕过
 
