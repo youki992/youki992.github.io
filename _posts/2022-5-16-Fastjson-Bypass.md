@@ -11,7 +11,7 @@ Fastjson算是RCE最常碰到的漏洞了，但是除了利用外对其知之甚
 
 在键值对外添加空白字符时会被代码过滤，可用于绕waf
 
-[![OfYZD0.jpg](https://s1.ax1x.com/2022/05/16/OfYZD0.jpg)](https://imgtu.com/i/OfYZD0)
+[![OfYnET.jpg](https://s1.ax1x.com/2022/05/16/OfYnET.jpg)](https://imgtu.com/i/OfYnET)
 
 Y4tacker师傅给出了fastjson自身过滤空白字符的代码
 
