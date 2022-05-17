@@ -585,15 +585,15 @@
 
 此外和curl不同，resty请求不添加header直接post会造成请求方法错误
 
-![]([![O4GRw6.png](https://s1.ax1x.com/2022/05/17/O4GRw6.png)](https://imgtu.com/i/O4GRw6))
+[![O4GRw6.png](https://s1.ax1x.com/2022/05/17/O4GRw6.png)](https://imgtu.com/i/O4GRw6)
 
 原来想用ceye探测回显内容，但是平台一直不稳定，就用了dig.pm
 
-![]([![O4GWTK.png](https://s1.ax1x.com/2022/05/17/O4GWTK.png)](https://imgtu.com/i/O4GWTK))
+[![O4GWTK.png](https://s1.ax1x.com/2022/05/17/O4GWTK.png)](https://imgtu.com/i/O4GWTK)
 
 使用时修改172行的dnslog地址以及190行SetBody中domain和token值
 
-![]([![O4GUe0.png](https://s1.ax1x.com/2022/05/17/O4GUe0.png)](https://imgtu.com/i/O4GUe0))
+[![O4GUe0.png](https://s1.ax1x.com/2022/05/17/O4GUe0.png)](https://imgtu.com/i/O4GUe0)
 
 ## 附录-参考文章
 
