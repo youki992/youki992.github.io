@@ -213,19 +213,17 @@ fastjson出网探测语句大概有40句多，这里贴不上github一直会报�
 > 
 > }
 > 
-> ## 3.漏洞验证
-> 
-> go自带的net/http库验证漏洞时会很慢，可以使用resty库重写一个，效率会更高
-> 
-> [GitHub - go-resty/resty: Simple HTTP and REST client library for
-> Go](https://github.com/go-resty/resty)
-> 
-> 需要使用resty库重写请求方式，并添加循环请求不同的Payload
-> 
-> Payload从固定的文件中读取，读取时替换dnslog部分（使用strings库），为了唯一性在dnslog前添加时间戳使其唯一
-> 
-> 每次POST后请求ceye的API看看有没有对应dnslog的请求结果
-> 
+## 3.漏洞验证
+
+go自带的net/http库验证漏洞时会很慢，可以使用resty库重写一个，效率会更高
+ 
+[GitHub - go-resty/resty: Simple HTTP and REST client library for Go](https://github.com/go-resty/resty)
+
+需要使用resty库重写请求方式，并添加循环请求不同的Payload
+
+Payload从固定的文件中读取，读取时替换dnslog部分（使用strings库），为了唯一性在dnslog前添加时间戳使其唯一
+
+每次POST后请求ceye的API看看有没有对应dnslog的请求结果
 > func verify(target string) string {
 > 
 > file, err := os.Open("poc.txt")
