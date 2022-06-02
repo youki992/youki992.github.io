@@ -1,7 +1,7 @@
 
 ## PHP "BUG" 特性
 
-[PHP 在线工具 | 菜鸟工具](https://c.runoob.com/compile/1/)
+[PHP 在线工具 - 菜鸟工具](https://c.runoob.com/compile/1/)
 
 [![XNtAC6.png](https://s1.ax1x.com/2022/06/03/XNtAC6.png)](https://imgtu.com/i/XNtAC6)
 
