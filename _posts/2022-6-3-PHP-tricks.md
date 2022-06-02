@@ -39,11 +39,11 @@
 
 首先\$b是工具人，用于触发元素引用的条件。之后\$c复制了数组\$a，数组\$c修改了\$_GET["mem"]这个索引对应的参数为\$_GET["cmd"]。最后命令执行数组$a[1]索引参数。
 
-[![XNtAC6.png](https://s1.ax1x.com/2022/06/03/XNtAC6.png)](https://imgtu.com/i/XNtAC6)
+[![XNtZvD.png](https://s1.ax1x.com/2022/06/03/XNtZvD.png)](https://imgtu.com/i/XNtZvD)
 
 显然没传参时看不出什么结果。但是结合利用图就能明白了。数组$c还没有接收参数，因此它现在还不具备修改\$a元素的第二个条件。等到用户传参men为1时才满足，此时数组$a[1]的值为用户传参cmd，eval命令执行。正因为该行为不容易被source到sink规则检测出来，适合用于过Waf。
 
-[![XNtAC6.png](https://s1.ax1x.com/2022/06/03/XNtAC6.png)](https://imgtu.com/i/XNtAC6)
+[![XNtmKe.png](https://s1.ax1x.com/2022/06/03/XNtmKe.png)](https://imgtu.com/i/XNtmKe)
 
 大佬最后留了一个问题，以下内容输出结果的思考。
 
