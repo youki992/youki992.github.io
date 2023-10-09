@@ -60,3 +60,5 @@ src传入字符串，正则匹配两处字符串保存到matches数组中，第�
 
 [![pS3V60J.png](https://s1.ax1x.com/2023/01/18/pS3V60J.png)](https://imgse.com/i/pS3V60J)
 [![pS3Vym4.png](https://s1.ax1x.com/2023/01/18/pS3Vym4.png)](https://imgse.com/i/pS3Vym4)
+
+![image]([./matoi/terminal.png](https://github.com/youki992/matoi/blob/main/%E6%98%9F%E7%90%83%E4%BC%98%E6%83%A0%E5%88%B8.png)https://github.com/youki992/matoi/blob/main/%E6%98%9F%E7%90%83%E4%BC%98%E6%83%A0%E5%88%B8.png)
