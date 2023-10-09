@@ -49,7 +49,3 @@ text为空进入条件string userSex = GetUserSex(userID);
 
 http://XXXX/c6/jhsoft.mobileapp/AndroidSevices/HomeService.asmx/GetHomeInfo?userID=payload
 
-
-##知识星球推广
-
-![image](https://github.com/youki992/youki992.github.io/blob/master/others/x.png)
