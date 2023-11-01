@@ -26,3 +26,5 @@ POC：
 [![piupmdO.png](https://z1.ax1x.com/2023/11/01/piupmdO.png)](https://imgse.com/i/piupmdO)
 
 [![piup8yt.png](https://z1.ax1x.com/2023/11/01/piup8yt.png)](https://imgse.com/i/piup8yt)
+
+Reference: https://github.com/Castle1984/CveRecord/blob/main/apply.md
