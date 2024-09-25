@@ -33,7 +33,12 @@
 // function openLOGO() { 
 // window.open ("img/middle-logo.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
 // } 
-
+document.addEventListener('DOMContentLoaded', function() {
+    var triangle = document.getElementById('corner-triangle');
+    triangle.addEventListener('click', function() {
+        window.location.href = 'https://example.com'; // 替换为你想要跳转的URL
+    });
+});
 
 </script> 
 
@@ -83,7 +88,7 @@
 </head>
 
 <body>
-
+<div id="corner-triangle" style="width: 0; height: 0; border-top: 50px solid #333; border-right: 50px solid transparent; position: fixed; top: 0; left: 0; z-index: 1000; cursor: pointer;"></div>
   <!--  开头封面    -->
   
   <section id="hero">
