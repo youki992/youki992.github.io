@@ -106,6 +106,34 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 24px;
             margin-bottom: 20px;
         }
+	    .member-row:hover {
+      background-color: #e0e0e0;
+    }
+
+    .member-row:hover .member-avatar {
+      transform: scale(1.5);
+      transition: transform 0.3s ease;
+    }
+
+    .member-row {
+      text-align: left;
+      background-color: #f2f2f2;
+    }
+
+    .member-row td {
+      padding: 10px;
+    }
+
+    .member-avatar {
+      max-width: 50px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .separator {
+      height: 1px;
+      background-color: #ddd;
+    }
     </style>
 </head>
 
