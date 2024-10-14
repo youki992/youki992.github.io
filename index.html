@@ -89,19 +89,24 @@ document.addEventListener('DOMContentLoaded', function() {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px; /* 图片之间的间距 */
+            gap: 20px; /* 图片之间的间距 */
             padding: 20px;
         }
         .partner a {
             display: block;
-            margin: 5px;
+            margin: 10px;
         }
         .partner img {
-            max-width: 100px; /* 图片的最大宽度 */
+            max-width: 150px; /* 图片的最大宽度 */
             height: auto; /* 保持原始宽高比 */
             border: none;
         }
-</style>
+        .partner-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -649,19 +654,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <section id="portfolio">
+    <div class="partner-title">合作伙伴</div>
     <div class="partner">
         <a href="https://wiki.freebuf.com/" target="_blank"><img src="img/freebuf_wiki.png" alt="FreeBuf Wiki"></a>
-<!-- 		<a href="https://www.anquanke.com/" target="_blank"><img data-original="partner/anquanke.jpg" src="partner/anquanke.jpg"></a>
-		<a href="https://www.ichunqiu.com/" target="_blank"><img data-original="partner/ichunqiu.jpg" src="partner/ichunqiu.jpg"></a>
-		<a href="https://xz.aliyun.com/" target="_blank"><img data-original="partner/xz_aliyun.jpg" src="partner/xz_aliyun.jpg"></a>
-		<a href="http://www.hongyaa.com.cn/" target="_blank"><img data-original="partner/hongyaa.jpg" src="partner/hongyaa.jpg"></a>
-		<a href="http://www.freebuf.com/" target="_blank"><img data-original="partner/freebuf.jpg" src="partner/freebuf.jpg"></a>
-		<a href="https://www.vulbox.com/" target="_blank"><img data-original="partner/vulbox.jpg" src="partner/vulbox.jpg"></a>
-		<a href="https://www.kanxue.com/" target="_blank"><img data-original="partner/kanxue.jpg" src="partner/kanxue.jpg"></a>
-		<a href="https://www.bugbank.cn/" target="_blank"><img data-original="partner/bugbank.jpg" src="partner/bugbank.jpg"></a>
-		<a href="https://dvpnet.io/" target="_blank"><img data-original="partner/dvpnet.png" src="partner/dvpnet.png"></a>
-		<a href="http://secbug.org/" target="_blank"><img data-original="partner/secbug.jpg" src="partner/secbug.jpg"></a>
-		<a href="https://www.ctfhub.com/" target="_blank"><img data-original="partner/ctfhub.png" src="partner/ctfhub.png"></a> -->
 	    </div>
 	</div>
 </section>
