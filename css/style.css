@@ -676,140 +676,99 @@ body.mobile-nav-active #mobile-nav-toggle {
   border: 2px solid #03C4EB;
 }
 
-/* Portfolio Section
---------------------------------*/
+    /* 基本样式 */
 #portfolio {
-  background: #F5F5F6;
-  padding: 80px 0;
-}
+      background: #F5F5F6;
+      padding: 80px 0;
+    }
 
-#portfolio .portfolio-item {
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
-  height: 100px;
-  width: 120%;
-  display: table;
-  overflow: hidden;
-  margin-bottom: 30px;
-}
+    #portfolio .portfolio-item {
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      position: relative;
+      height: 100px;
+      width: 100%;
+      display: table;
+      overflow: hidden;
+      margin-bottom: 30px;
+      transition: transform 0.3s ease;
+    }
 
+    #portfolio .portfolio-item:hover {
+      transform: scale(1.05);
+    }
 
-#portfolio .portfolio-item .details {
-  height: 260px;
-  background: #fff;
-  display: table-cell;
-  vertical-align: middle;
-  opacity: 0;
-  transition: 0.3s;
-  text-align: center;
-}
+    #portfolio .portfolio-item .details {
+      height: 100px;
+      background: rgba(0, 0, 0, 0.7);
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-#portfolio .portfolio-item .details h4 {
-  font-size: 24px;
-  font-family:palatino;
-  transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: transform 0.3s, opacity 0.3s;
-  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  -webkit-transform: translate3d(0, -15px, 0);
-  transform: translate3d(0, -15px, 0);
-  font-weight: 700;
-  color: #000000;
-}
+    #portfolio .portfolio-item:hover .details {
+      opacity: 1;
+    }
 
-#portfolio .portfolio-item .details span {
-  display: block;
-  color: #666666;
-  font-size: 17px;
-  transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: transform 0.3s, opacity 0.3s;
-  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  -webkit-transform: translate3d(0, 15px, 0);
-  transform: translate3d(0, 15px, 0);
-}
+    #portfolio .portfolio-item .details h4 {
+      font-size: 24px;
+      font-family: palatino;
+      margin: 0;
+      transition: transform 0.3s ease;
+      transform: translate3d(0, -15px, 0);
+    }
 
-#portfolio .portfolio-item:hover .details {
-  opacity: 0.8;
-}
+    #portfolio .portfolio-item:hover .details h4 {
+      transform: translate3d(0, 0, 0);
+    }
 
-#portfolio .portfolio-item:hover .details h4 {
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
+    #portfolio .portfolio-item .details span {
+      display: block;
+      font-size: 17px;
+      transition: transform 0.3s ease;
+      transform: translate3d(0, 15px, 0);
+    }
 
-#portfolio .portfolio-item:hover .details span {
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
+    #portfolio .portfolio-item:hover .details span {
+      transform: translate3d(0, 0, 0);
+    }
 
+    /* Tooltip 样式 */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
 
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
 
+      /* 定位 */
+      position: absolute;
+      z-index: 1;
+      bottom: 120%; /* 位置调整 */
+      left: 50%;
+      margin-left: -100px; /* 使提示框水平居中 */
 
-/* 新的portfolio */
+      /* 渐变效果 */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
 
-
-#portfolio .portfolio-item-new {
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
-  height: 300px;
-  width: 80px;
-  display: table;
-  overflow: hidden;
-  margin-bottom: 30px;
-}
-
-
-#portfolio .portfolio-item-new .details {
-  height: 300px;
-  width:  80px;
-  background: #fff;
-  display: table-cell;
-  vertical-align: middle;
-  opacity: 0;
-  transition: 0.3s;
-  text-align: center;
-}
-
-#portfolio .portfolio-item-new .details h4 {
-  font-size: 16px;
-  transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: transform 0.3s, opacity 0.3s;
-  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  -webkit-transform: translate3d(0, -15px, 0);
-  transform: translate3d(0, -15px, 0);
-  font-weight: 700;
-  color: #333333;
-}
-
-#portfolio .portfolio-item-new .details span {
-  display: block;
-  color: #666666;
-  font-size: 13px;
-  transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: transform 0.3s, opacity 0.3s;
-  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  -webkit-transform: translate3d(0, 15px, 0);
-  transform: translate3d(0, 15px, 0);
-}
-
-#portfolio .portfolio-item-new:hover .details {
-  opacity: 0.8;
-}
-
-#portfolio .portfolio-item-new:hover .details h4 {
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
-
-#portfolio .portfolio-item-new:hover .details span {
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
-
-
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
 
 
 
