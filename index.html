@@ -134,6 +134,46 @@ document.addEventListener('DOMContentLoaded', function() {
       height: 1px;
       background-color: #ddd;
     }
+	.section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .section-title-divider {
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .section-description {
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    .about-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .about-text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .pic img {
+      max-width: 100%;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .pic img:hover {
+      transform: scale(1.1);
+    }
+
+    .pic {
+      text-align: center;
+      margin-top: 10px;
+    }
     </style>
 </head>
 
@@ -233,115 +273,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
   <!--  Design   -->
 
-  <section id="testimonials">
+<section id="testimonials">
     <div class="container wow fadeInUp">
       <div class="row">
-	
-		<div class="col-md-12">
+        <div class="col-md-12">
           <h3 class="section-title">开发工具</h3>
           <div class="section-title-divider"></div>
           <p class="section-description"><u><font size="4"><i>Developed hack tools</i></font></u></p>
-        
-		
-		
-<h2 class="about-title"><font color="00000"><b>VscanPlus</b></font></h2>
-<font size="4">
-  <p class="about-text" style="text-align: left ;">
-    Vscan综合扫描工具的二次开发版本，基于veo师傅的漏扫工具vscan二次开发的版本，端口扫描、指纹检测、目录fuzz、漏洞扫描功能工具，批量快速检测网站安全隐患。
-  </p>
-  <p><a href="https://github.com/youki992/VscanPlus" target="_blank">工具地址</a></p>
-  <p><div class="pic" style="text-align: center;"><img src="img/QQ截图20240723145536.png" alt="" style="max-width: 450px; height: auto;"></div> </p>
-</font>
-			
-<h2 class="about-title"><font color="00000"><b>Fofa-Cloud-Server</b></font></h2>
-<font size="4">
-  <p class="about-text" style="text-align: left ;">
-    基于单FOFA账号部署的多人协作查询B/S模式，后端部署后通过前端网页交互查询数据和导出数据，前端由html开发，后端由spring-boot开发。根据不同情况可以部署在本地局域网中，或是部署在服务器上，使用Apache或Nginx进行配置前端页面。
-  </p>
-  <p><a href="https://github.com/youki992/Fofa-Cloud-Server" target="_blank">工具地址</a></p>
-  <p><div class="pic" style="text-align: center;"><img src="img/QQ截图20240914101802.png" alt="" style="max-width: 450px; height: auto;"></div> </p>
-</font>
 
-<h2 class="about-title"><font color="00000"><b>Goby插件 - VscanPlus</b></font></h2>
-<font size="4">
-  <p class="about-text" style="text-align: left ;">
-    Goby联动VscanPlus的插件，可对单个IP进行更加深度的漏洞、指纹、端口扫描检测。
-  </p>
-  <p><a href="https://api.gobies.org/api/plugin-download/version_hash/5a966667f3b427b3a8d33c745c35fbe4" target="_blank">工具地址</a></p>
-  <p><div class="pic" style="text-align: center;"><img src="/img/2dd46aa2-c808-478e-9efb-a7f90862f281.png" alt="" style="max-width: 450px; height: auto;"></div> </p>
-</font>
-		<!-- <h2 class="about-title"><font color="00000"><b>Construction of key gene pathway</b></font></h2>
-			<font size="4">
-				<p class="about-text">
-					CrpP is the key enzyme to degrade CIP. Signal peptide pelB+5D coding sequence was added to guarantee extracellular expression of CrpP. In order to characterize the enzyme expression and locate it,  TagRFP, a basic (constitutively fluorescent) red fluorescent protein with very low acid sensitivity, was fused with our target protein CrpP. Lastly, to ensure completely transcriptional termination, double terminator was selected.
-				</p>
-				<p> </p>
-		    </font>
-		
-		<div align="center"><img src="img/线性质粒.png" width="90%"></img></div>
-		
-		<div class="content"><p align="center"><font color="00000">Fig. Schematic map of TG2019-Module001.</font></p></div>
-		
-			<font size="3.5" color="00000">
-				<p style="font-family:palatino">
-					PAtpl: constitutive promoter which has its origin in Bacillus subtilis; RBS: ribosome binding site; 
-				<br>pelB+5D: an extra signal peptide pelB followed by five aspartate repeats; 
-				<br>crpP: a novel CIP gegradation gene; 
-				<br>TagRFP: red fluorescent protein with lower acid sensitivity; 
-				<br>crpP-TagRFP: CrpP-TagRFP fusion protein coding sequence; 
-				<br>Ter BBa_B0010 and Ter BBa_B0012: the most commonly used double terminator,namely BBa_B0015.
-				</p>
-				<p> </p>
-		    </font>
+          <h2 class="about-title"><font color="00000"><b>VscanPlus</b></font></h2>
+          <font size="4">
+            <p class="about-text" style="text-align: left;">
+              Vscan综合扫描工具的二次开发版本，基于veo师傅的漏扫工具vscan二次开发的版本，端口扫描、指纹检测、目录fuzz、漏洞扫描功能工具，批量快速检测网站安全隐患。
+            </p>
+            <p><a href="https://github.com/youki992/VscanPlus" target="_blank">工具地址</a></p>
+            <p><div class="pic"><img src="img/QQ截图20240723145536.png" alt="" style="max-width: 450px; height: auto;"></div></p>
+          </font>
 
-		
-		<h2 class="about-title"><font color="00000"><b>The CIP Killer</b></font></h2>
-			<font size="4">
-				<p class="content" style="font-family:palatino">
-					In order to apply our E.coli to practical scenarios, we are going to construct a device for ciprofloxacin degradation.We call it CIP Killer.First,We plan to use PVA embedding method to immobilize the recombinant E.coli which has the advantages of simple operation, non-toxicity and good stability.
-				</p>
+          <h2 class="about-title"><font color="00000"><b>Fofa-Cloud-Server</b></font></h2>
+          <font size="4">
+            <p class="about-text" style="text-align: left;">
+              基于单FOFA账号部署的多人协作查询B/S模式，后端部署后通过前端网页交互查询数据和导出数据，前端由html开发，后端由spring-boot开发。根据不同情况可以部署在本地局域网中，或是部署在服务器上，使用Apache或Nginx进行配置前端页面。
+            </p>
+            <p><a href="https://github.com/youki992/Fofa-Cloud-Server" target="_blank">工具地址</a></p>
+            <p><div class="pic"><img src="img/QQ截图20240914101802.png" alt="" style="max-width: 450px; height: auto;"></div></p>
+          </font>
 
-				
-				
-				<p> </p>
-		    </font>
-		</div> -->
-	  </div>
-	  
-	  
-	  <!-- <div class="row">
-        
-		<div class="col-md-3 col-lg-5">
-          <div class="profile">
-            <div class="pic"><img src="img/装置 进水.png" alt=""></div>
-          </div>
-        </div>
-
-        <div class="col-md-9 col-lg-7">
-          <div class="quote">
-            <b><img src="img/quote_sign_left.png" alt=""></b> In addition, we have conceived a ciprofloxacin degradation device that can be implemented prior to the secondary treatment in sewage treatment works. At this treatment point, it is possible to prevent the microorganism in activated sludge from producing antibiotic resistance.<small><img src="img/quote_sign_right.png" alt=""></small>
-		  </div>
+          <h2 class="about-title"><font color="00000"><b>Goby插件 - VscanPlus</b></font></h2>
+          <font size="4">
+            <p class="about-text" style="text-align: left;">
+              Goby联动VscanPlus的插件，可对单个IP进行更加深度的漏洞、指纹、端口扫描检测。
+            </p>
+            <p><a href="https://api.gobies.org/api/plugin-download/version_hash/5a966667f3b427b3a8d33c745c35fbe4" target="_blank">工具地址</a></p>
+            <p><div class="pic"><img src="/img/2dd46aa2-c808-478e-9efb-a7f90862f281.png" alt="" style="max-width: 450px; height: auto;"></div></p>
+          </font>
         </div>
       </div>
-
-	  
-      <div class="row">
-        <div class="col-md-9 col-lg-7">
-          <div class="quote">
-            <b><img src="img/quote_sign_left.png" alt=""></b> In CIP Killer，an integrated aeration system would need to be added to the water tank, which will bear the wastewater with the immobilized recombinant E.coli as well, in order to adequately secure mixing conditions. Therefore, with air bubbles spurt from the bottom of the tank, the possibilities for the enzyme-substance reactions to take place increase, and the precipitation of the immobilized recombinant E.coli is avoided. There is a porous barrier on the aeration device. When we need to recycle the E. coli, the porous barrier will rise and the water and the E. coli will be separate.<small><img src="img/quote_sign_right.png" alt=""></small>
-          </div>
-        </div>
-
-		<div class="col-md-3">
-          <div class="profile">
-            <div class="pic"><img src="img/装置 出水.png" alt=""></div>
-          </div>
-        </div>
-      </div>
-	  
-	  
-
-    </div> -->
+    </div>
   </section>
 
 
