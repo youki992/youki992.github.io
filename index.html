@@ -84,7 +84,24 @@ document.addEventListener('DOMContentLoaded', function() {
             margin-right: 180px;
         } */
     </style> -->
-
+<style>
+        .partner {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px; /* 图片之间的间距 */
+            padding: 20px;
+        }
+        .partner a {
+            display: block;
+            margin: 5px;
+        }
+        .partner img {
+            max-width: 100px; /* 图片的最大宽度 */
+            height: auto; /* 保持原始宽高比 */
+            border: none;
+        }
+</style>
 </head>
 
 <body>
@@ -632,9 +649,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <section id="portfolio">
-<div class="partner">
-	    <div>
-		<a href="https://wiki.freebuf.com/" target="_blank"><img data-original="img/freebuf_wiki.png" src="img/freebuf_wiki.png"></a>
+    <div class="partner">
+        <a href="https://wiki.freebuf.com/" target="_blank"><img src="img/freebuf_wiki.png" alt="FreeBuf Wiki"></a>
 <!-- 		<a href="https://www.anquanke.com/" target="_blank"><img data-original="partner/anquanke.jpg" src="partner/anquanke.jpg"></a>
 		<a href="https://www.ichunqiu.com/" target="_blank"><img data-original="partner/ichunqiu.jpg" src="partner/ichunqiu.jpg"></a>
 		<a href="https://xz.aliyun.com/" target="_blank"><img data-original="partner/xz_aliyun.jpg" src="partner/xz_aliyun.jpg"></a>
