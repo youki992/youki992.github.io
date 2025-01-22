@@ -203,6 +203,46 @@ document.addEventListener('DOMContentLoaded', function() {
       max-width: 100%;
       height: auto;
     }
+
+	/* 样式表 */
+#certificates {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.certificates-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.certificates-container {
+  display: flex;
+  flex-wrap: wrap; /* 允许换行 */
+  gap: 20px; /* 证书之间的间距 */
+  justify-content: center; /* 居中对齐 */
+}
+
+.certificate {
+  flex: 1 1 calc(33.333% - 40px); /* 每个证书占据大约1/3宽度，减去gap */
+  max-width: calc(33.333% - 40px);
+  min-width: 200px; /* 设置最小宽度，以便在小屏幕上不会过小 */
+  background-color: #f9f9f9;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.certificate:hover {
+  transform: scale(1.05); /* 鼠标悬停时稍微放大 */
+}
+
+.certificate img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
     </style>
 </head>
 
@@ -782,6 +822,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     </div>
   </section>
+
+<section id="certificates">
+  <div class="certificates-title">证书展示</div>
+  <div class="certificates-container">
+    <!-- 每个 'certificate' div 代表一张证书 -->
+    <div class="certificate">
+      <a href="https://example.com/cert1" target="_blank">
+        <img src="img/certificate1.png" alt="Certificate 1">
+      </a>
+    </div>
+    <div class="certificate">
+      <a href="https://example.com/cert2" target="_blank">
+        <img src="img/certificate2.png" alt="Certificate 2">
+      </a>
+    </div>
+    <div class="certificate">
+      <a href="https://example.com/cert3" target="_blank">
+        <img src="img/certificate3.png" alt="Certificate 3">
+      </a>
+    </div>
+    <!-- 继续添加更多证书... -->
+    <!-- 确保每一行有三个 'certificate' div -->
+  </div>
+</section>
 
 
   <section id="partner">
