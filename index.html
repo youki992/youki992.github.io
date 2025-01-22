@@ -231,6 +231,8 @@ document.addEventListener('DOMContentLoaded', function() {
   background-color: #f9f9f9;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative; /* 使子元素能够相对于此元素定位 */
+  overflow: hidden; /* 确保内容不会溢出 */
   transition: transform 0.2s ease-in-out;
 }
 
@@ -242,6 +244,31 @@ document.addEventListener('DOMContentLoaded', function() {
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* 新增的 overlay 样式 */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* 半透明背景色 */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.certificate:hover .overlay {
+  opacity: 1;
+}
+
+.overlay .text {
+  font-size: 18px;
+  text-align: center;
 }
     </style>
 </head>
@@ -827,32 +854,45 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="certificates-title">荣誉展示</div>
   <div class="certificates-container">
     <!-- 每个 'certificate' div 代表一张证书 -->
-    <div class="certificate">
+
+<div class="certificate">
       <a target="_blank">
-        <img src="img/1737508446136.jpg" alt="浙江大学漏洞报送证书">
+        <img src="img/QQ20250122-092657.png" alt="Certificate 1">
+        <div class="overlay">
+          <div class="text">陕西国防工业学院漏洞报送证书</div>
+        </div>
       </a>
-    </div>
-    <div class="certificate">
+</div>
+<div class="certificate">
       <a target="_blank">
-        <img src="img/QQ20250122-092657.png" alt="陕西国防工业学院漏洞报送证书">
+        <img src="img/1737508446136.jpg" alt="Certificate 1">
+        <div class="overlay">
+          <div class="text">浙江大学漏洞报送证书</div>
+        </div>
       </a>
-    </div>
-    <div class="certificate">
+</div>
+<div class="certificate">
       <a target="_blank">
-        <img src="img/1737508868964.jpg" alt="苏州高新区教育局漏洞报送证书">
+        <img src="img/1737508868964.jpg" alt="Certificate 1">
+        <div class="overlay">
+          <div class="text">苏州高新区教育局漏洞报送证书</div>
+        </div>
       </a>
-    </div>
+</div>
     <!-- 继续添加更多证书... -->
     <!-- 确保每一行有三个 'certificate' div -->
   </div>
 
   <div class="certificates-container">
     <!-- 每个 'certificate' div 代表一张证书 -->
-    <div class="certificate">
+<div class="certificate">
       <a target="_blank">
-        <img src="img/1737508898396.jpg" alt="漏洞银行年度0 day潜力奖证书">
+        <img src="img/1737508898396.jpg" alt="Certificate 1">
+        <div class="overlay">
+          <div class="text">漏洞银行年度0 day潜力奖证书</div>
+        </div>
       </a>
-    </div>
+</div>
 <!--     <div class="certificate">
       <a target="_blank">
         <img src="img/QQ20250122-092657.png" alt="Certificate 2">
