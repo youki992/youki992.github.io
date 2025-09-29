@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级4 - 过滤绕过XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级4 - 过滤绕过XSS</h1>
+            <p class="subtitle">绕过基础过滤机制实现XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 中等 | 4/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>在实际应用中，开发者通常会实施一些基础的过滤机制来防止XSS攻击。但是，不完善的过滤往往可以被绕过。这个挑战模拟了一个有基础过滤的搜索功能。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>绕过输入过滤机制，成功执行JavaScript代码并弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>系统过滤了&lt;script&gt;标签，但可能有其他方式</li>
+                <li>尝试使用事件处理器，如onclick、onload、onerror等</li>
+                <li>可以尝试大小写混合来绕过过滤</li>
+                <li>HTML实体编码可能有效</li>
+                <li>示例：&lt;img src=x onerror="alert('XSS')"&gt;</li>
+                <li>或者：&lt;ScRiPt&gt;alert('XSS')&lt;/ScRiPt&gt;</li>
+                <li>还可以尝试：&lt;svg onload="alert('XSS')"&gt;</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>过滤机制分析</h3>
+            <div class="code-block">
+// 基础过滤函数
+function basicFilter(input) {
+    // 过滤常见的XSS标签（不完善的过滤）
+    let filtered = input;
+    
+    // 过滤script标签（仅小写）
+    filtered = filtered.replace(/&lt;script&gt;/gi, '');
+    filtered = filtered.replace(/&lt;\/script&gt;/gi, '');
+    
+    // 过滤一些危险的事件（不完整）
+    filtered = filtered.replace(/javascript:/gi, '');
+    filtered = filtered.replace(/on\w+=/gi, '');
+    
+    return filtered;
+}
+
+// 搜索处理函数
+function handleSearch(query) {
+    // 应用基础过滤
+    const filteredQuery = basicFilter(query);
+    
+    // 显示搜索结果（存在XSS漏洞）
+    document.getElementById('searchResult').innerHTML = 
+        '搜索结果：' + filteredQuery;
+}
+
+// 过滤分析：
+// 1. 只过滤了小写的script标签
+// 2. 事件处理器过滤不完整
+// 3. 没有考虑HTML实体编码
+// 4. 没有过滤其他危险标签如img、svg等
+// 5. 可以通过大小写混合、编码等方式绕过
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>搜索测试区域</h3>
+            
+            <div class="form-group">
+                <label for="searchInput">搜索内容：</label>
+                <input type="text" id="searchInput" placeholder="输入搜索关键词..." class="payload-input">
+                <button onclick="performSearch()" class="btn">搜索</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>搜索结果：</h4>
+                <div class="output-box" id="searchResult">
+                    请输入搜索关键词
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>测试过滤效果：</label>
+                <textarea id="filterTest" rows="3" placeholder="输入内容查看过滤效果..." onkeyup="testFilter()"></textarea>
+                <div class="output-box" id="filterResult" style="margin-top: 10px;">
+                    过滤结果将显示在这里
+                </div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>绕过技巧：</strong>
+                <ul>
+                    <li>大小写混合：&lt;ScRiPt&gt;、&lt;IMG&gt;</li>
+                    <li>事件处理器：onclick、onload、onerror、onmouseover</li>
+                    <li>其他标签：&lt;svg&gt;、&lt;img&gt;、&lt;iframe&gt;</li>
+                    <li>HTML实体编码：&amp;lt; &amp;gt;</li>
+                    <li>属性注入：src、href等属性</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！过滤绕过XSS攻击成功！你已经掌握了过滤绕过技术！');
+                }, 100);
+            }
+        };
+
+        // 基础过滤函数（存在绕过漏洞）
+        function basicFilter(input) {
+            let filtered = input;
+            
+            // 只过滤小写的script标签（可以被绕过）
+            filtered = filtered.replace(/<script>/gi, '');
+            filtered = filtered.replace(/<\/script>/gi, '');
+            
+            // 不完整的事件处理器过滤（可以被绕过）
+            filtered = filtered.replace(/javascript:/gi, '');
+            filtered = filtered.replace(/on\w+=/gi, '');
+            
+            return filtered;
+        }
+
+        // 搜索处理函数
+        function handleSearch(query) {
+            const filteredQuery = basicFilter(query);
+            
+            // 存在XSS漏洞的输出
+            document.getElementById('searchResult').innerHTML = '搜索结果：' + filteredQuery;
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (!query.trim()) {
+                alert('请输入搜索关键词');
+                return;
+            }
+            
+            handleSearch(query);
+        }
+
+        function testFilter() {
+            const input = document.getElementById('filterTest').value;
+            const filtered = basicFilter(input);
+            document.getElementById('filterResult').innerHTML = 
+                '<strong>原始输入：</strong>' + escapeHtml(input) + 
+                '<br><strong>过滤后：</strong>' + escapeHtml(filtered);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"过滤机制分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车搜索
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.id === 'searchInput') {
+                performSearch();
+            }
+        });
+    </script>
+
+    <style>
+        .payload-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+
+        .output-area {
+            margin: 20px 0;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 50px;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+        }
+
+        #filterResult {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</body>
+</html>

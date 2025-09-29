@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级5 - 属性注入XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级5 - 属性注入XSS</h1>
+            <p class="subtitle">通过HTML属性注入实现XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 中等 | 5/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>属性注入XSS发生在用户输入被插入到HTML标签的属性中时。即使标签本身是安全的，恶意的属性值也可能导致JavaScript执行。这种攻击常见于图片链接、表单值等场景。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>通过修改图片链接的值，注入恶意属性来执行JavaScript代码并弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>用户输入被直接插入到img标签的src属性中</li>
+                <li>可以通过闭合引号来注入新的属性</li>
+                <li>尝试添加事件处理器属性，如onerror、onload等</li>
+                <li>示例：x" onerror="alert('XSS')</li>
+                <li>或者：javascript:alert('XSS')</li>
+                <li>还可以尝试：x' onload='alert(\"XSS\")'</li>
+                <li>注意引号的闭合和转义</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>漏洞代码分析</h3>
+            <div class="code-block">
+// 图片显示函数
+function displayImage(imageUrl) {
+    // 直接将用户输入插入到HTML属性中（存在XSS漏洞）
+    const imgHtml = '&lt;img src="' + imageUrl + '" alt="用户图片" width="200"&gt;';
+    
+    // 使用innerHTML输出
+    document.getElementById('imageContainer').innerHTML = imgHtml;
+}
+
+// 表单处理函数
+function updateProfile(name, value) {
+    // 直接将用户输入作为表单值（存在XSS漏洞）
+    const inputHtml = '&lt;input type="text" value="' + value + '" readonly&gt;';
+    
+    document.getElementById('profileContainer').innerHTML = 
+        '&lt;label&gt;' + name + ':&lt;/label&gt;' + inputHtml;
+}
+
+// 漏洞分析：
+// 1. 用户输入直接插入到HTML属性中
+// 2. 没有对引号进行转义或过滤
+// 3. 攻击者可以闭合属性并注入新属性
+// 4. 事件处理器属性可以执行JavaScript代码
+
+// 攻击示例：
+// 输入：x" onerror="alert('XSS')"
+// 生成：&lt;img src="x" onerror="alert('XSS')"" alt="用户图片"&gt;
+// 结果：当图片加载失败时执行alert('XSS')
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>图片链接测试区域</h3>
+            
+            <div class="form-group">
+                <label for="imageUrl">图片链接：</label>
+                <input type="text" id="imageUrl" placeholder="输入图片URL..." class="payload-input" value="https://via.placeholder.com/200x150">
+                <button onclick="loadImage()" class="btn">加载图片</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>图片显示区域：</h4>
+                <div class="output-box" id="imageContainer">
+                    <img src="https://via.placeholder.com/200x150" alt="默认图片" width="200">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>生成的HTML代码：</label>
+                <textarea id="generatedHtml" rows="3" readonly class="code-display"></textarea>
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>用户资料测试区域</h3>
+            
+            <div class="form-group">
+                <label for="profileName">字段名称：</label>
+                <input type="text" id="profileName" value="用户名" placeholder="输入字段名称...">
+            </div>
+            
+            <div class="form-group">
+                <label for="profileValue">字段值：</label>
+                <input type="text" id="profileValue" placeholder="输入字段值..." class="payload-input" value="张三">
+                <button onclick="updateUserProfile()" class="btn">更新资料</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>用户资料显示：</h4>
+                <div class="output-box" id="profileContainer">
+                    <label>用户名:</label><input type="text" value="张三" readonly>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>属性注入技巧：</strong>
+                <ul>
+                    <li>闭合引号：使用"或'来闭合当前属性</li>
+                    <li>注入事件：onerror、onload、onclick、onmouseover等</li>
+                    <li>JavaScript协议：javascript:alert('XSS')</li>
+                    <li>多重编码：HTML实体、URL编码等</li>
+                    <li>注意上下文：单引号、双引号的使用</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！属性注入XSS攻击成功！你已经掌握了属性注入技术！');
+                }, 100);
+            }
+        };
+
+        // 属性注入XSS漏洞函数
+        function displayImage(imageUrl) {
+            // 存在XSS漏洞：直接插入到属性中
+            const imgHtml = '<img src="' + imageUrl + '" alt="用户图片" width="200" style="max-width: 100%; height: auto;">';
+            
+            document.getElementById('imageContainer').innerHTML = imgHtml;
+            
+            // 显示生成的HTML代码
+            document.getElementById('generatedHtml').value = imgHtml;
+        }
+
+        function updateProfile(name, value) {
+            // 存在XSS漏洞：直接插入到属性中
+            const inputHtml = '<input type="text" value="' + value + '" readonly style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">';
+            
+            document.getElementById('profileContainer').innerHTML = 
+                '<label style="display: block; margin-bottom: 5px; font-weight: bold;">' + name + ':</label>' + inputHtml;
+        }
+
+        function loadImage() {
+            const imageUrl = document.getElementById('imageUrl').value;
+            if (!imageUrl.trim()) {
+                alert('请输入图片URL');
+                return;
+            }
+            
+            displayImage(imageUrl);
+        }
+
+        function updateUserProfile() {
+            const name = document.getElementById('profileName').value;
+            const value = document.getElementById('profileValue').value;
+            
+            if (!name.trim() || !value.trim()) {
+                alert('请填写字段名称和值');
+                return;
+            }
+            
+            updateProfile(name, value);
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"漏洞代码分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            // 初始化显示
+            displayImage('https://via.placeholder.com/200x150');
+            updateProfile('用户名', '张三');
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车提交
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (event.target.id === 'imageUrl') {
+                    loadImage();
+                } else if (event.target.id === 'profileValue') {
+                    updateUserProfile();
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .payload-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            resize: vertical;
+        }
+
+        .output-area {
+            margin: 20px 0;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 80px;
+            word-wrap: break-word;
+        }
+
+        .output-box img {
+            display: block;
+            margin: 10px auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .output-box label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .output-box input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</body>
+</html>

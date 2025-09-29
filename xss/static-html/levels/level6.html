@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级6 - JavaScript协议XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级6 - JavaScript协议XSS</h1>
+            <p class="subtitle">利用JavaScript协议实现XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 困难 | 6/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>JavaScript协议XSS是一种特殊的XSS攻击方式，通过在URL中使用javascript:协议来执行恶意代码。这种攻击常见于链接、表单action、iframe src等场景，特别是当应用允许用户自定义链接时。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>通过修改链接URL，使用JavaScript协议执行恶意代码并弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>JavaScript协议允许在URL中直接执行JavaScript代码</li>
+                <li>基本语法：javascript:alert('XSS')</li>
+                <li>可以执行任意JavaScript代码</li>
+                <li>尝试不同的编码方式绕过过滤</li>
+                <li>示例：javascript:alert('XSS')</li>
+                <li>编码示例：javascript:alert(String.fromCharCode(88,83,83))</li>
+                <li>也可以尝试：javascript:eval('alert("XSS")')</li>
+                <li>注意大小写：JavaScript:、JAVASCRIPT:等</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>漏洞代码分析</h3>
+            <div class="code-block">
+// 链接生成函数
+function createLink(url, text) {
+    // 简单的URL验证（存在绕过漏洞）
+    if (url.toLowerCase().startsWith('http://') || 
+        url.toLowerCase().startsWith('https://') ||
+        url.toLowerCase().startsWith('ftp://')) {
+        // 认为是安全的URL
+    } else {
+        // 其他协议可能被忽略（包括javascript:）
+        console.log('非标准协议URL：' + url);
+    }
+    
+    // 直接生成链接（存在XSS漏洞）
+    const linkHtml = '&lt;a href="' + url + '" target="_blank"&gt;' + text + '&lt;/a&gt;';
+    return linkHtml;
+}
+
+// 表单处理函数
+function updateForm(action) {
+    // 直接设置表单action（存在XSS漏洞）
+    document.getElementById('testForm').action = action;
+    
+    // 显示当前action
+    document.getElementById('formAction').innerHTML = 
+        '当前表单action: ' + action;
+}
+
+// 漏洞分析：
+// 1. URL验证不完善，只检查了常见的http/https协议
+// 2. javascript:协议没有被过滤
+// 3. 用户输入直接插入到href属性中
+// 4. 表单action也可以使用javascript:协议
+
+// 攻击原理：
+// javascript:协议允许在URL中执行JavaScript代码
+// 当用户点击链接或提交表单时，恶意代码被执行
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>链接生成测试区域</h3>
+            
+            <div class="form-group">
+                <label for="linkUrl">链接URL：</label>
+                <input type="text" id="linkUrl" placeholder="输入链接URL..." class="payload-input" value="https://www.example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="linkText">链接文本：</label>
+                <input type="text" id="linkText" placeholder="输入链接文本..." value="点击这里">
+                <button onclick="generateLink()" class="btn">生成链接</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>生成的链接：</h4>
+                <div class="output-box" id="linkContainer">
+                    <a href="https://www.example.com" target="_blank">点击这里</a>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>生成的HTML代码：</label>
+                <textarea id="linkHtml" rows="2" readonly class="code-display"></textarea>
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>表单Action测试区域</h3>
+            
+            <div class="form-group">
+                <label for="formActionUrl">表单Action URL：</label>
+                <input type="text" id="formActionUrl" placeholder="输入表单action..." class="payload-input" value="/submit">
+                <button onclick="updateFormAction()" class="btn">更新Action</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>测试表单：</h4>
+                <div class="output-box">
+                    <form id="testForm" action="/submit" method="post" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: white;">
+                        <div style="margin-bottom: 10px;">
+                            <label>用户名：</label>
+                            <input type="text" name="username" value="testuser" style="margin-left: 10px; padding: 5px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label>密码：</label>
+                            <input type="password" name="password" value="password" style="margin-left: 10px; padding: 5px;">
+                        </div>
+                        <button type="submit" class="btn btn-success">提交表单</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div id="formAction" class="info-display">
+                    当前表单action: /submit
+                </div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>JavaScript协议特点：</strong>
+                <ul>
+                    <li>可在任何接受URL的地方使用</li>
+                    <li>执行时机：点击链接、提交表单、加载资源时</li>
+                    <li>绕过技巧：大小写混合、编码、空格等</li>
+                    <li>危险场景：href、src、action等属性</li>
+                    <li>防护：严格的URL协议白名单验证</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！JavaScript协议XSS攻击成功！你已经掌握了JavaScript协议利用技术！');
+                }, 100);
+            }
+        };
+
+        // JavaScript协议XSS漏洞函数
+        function createLink(url, text) {
+            // 不完善的URL验证（存在绕过漏洞）
+            if (url.toLowerCase().startsWith('http://') || 
+                url.toLowerCase().startsWith('https://') ||
+                url.toLowerCase().startsWith('ftp://')) {
+                console.log('标准协议URL：' + url);
+            } else {
+                console.log('非标准协议URL：' + url);
+            }
+            
+            // 存在XSS漏洞：直接插入URL
+            const linkHtml = '<a href="' + url + '" target="_blank" style="color: #007bff; text-decoration: underline;">' + text + '</a>';
+            return linkHtml;
+        }
+
+        function updateForm(action) {
+            // 存在XSS漏洞：直接设置action
+            document.getElementById('testForm').action = action;
+            
+            document.getElementById('formAction').innerHTML = 
+                '当前表单action: <code>' + action + '</code>';
+        }
+
+        function generateLink() {
+            const url = document.getElementById('linkUrl').value;
+            const text = document.getElementById('linkText').value;
+            
+            if (!url.trim() || !text.trim()) {
+                alert('请填写链接URL和文本');
+                return;
+            }
+            
+            const linkHtml = createLink(url, text);
+            document.getElementById('linkContainer').innerHTML = linkHtml;
+            document.getElementById('linkHtml').value = linkHtml;
+        }
+
+        function updateFormAction() {
+            const action = document.getElementById('formActionUrl').value;
+            
+            if (!action.trim()) {
+                alert('请输入表单action');
+                return;
+            }
+            
+            updateForm(action);
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"漏洞代码分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            // 初始化显示
+            generateLink();
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车提交
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (event.target.id === 'linkUrl' || event.target.id === 'linkText') {
+                    generateLink();
+                } else if (event.target.id === 'formActionUrl') {
+                    updateFormAction();
+                }
+            }
+        });
+
+        // 阻止表单实际提交（避免页面跳转）
+        document.getElementById('testForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('表单提交被阻止（演示目的）');
+        });
+    </script>
+
+    <style>
+        .payload-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            resize: vertical;
+        }
+
+        .info-display {
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .info-display code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #e83e8c;
+        }
+
+        .output-area {
+            margin: 20px 0;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 60px;
+            word-wrap: break-word;
+        }
+
+        .output-box a {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .output-box form {
+            margin: 0;
+        }
+
+        .output-box form label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .output-box form input {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 8px;
+        }
+    </style>
+</body>
+</html>

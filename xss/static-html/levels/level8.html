@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级8 - 增强版缓存中毒XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级8 - 增强版缓存中毒XSS</h1>
+            <p class="subtitle">绕过多重过滤机制，利用缓存机制进行高级XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 极难 | 8/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>增强版缓存中毒XSS是最高难度的挑战。服务器添加了多重过滤机制，你需要找到绕过所有过滤器的方法来实现XSS攻击。这个挑战结合了高级过滤绕过技术和缓存机制利用。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>绕过服务器的多重过滤机制，通过缓存中毒技术成功执行JavaScript代码。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>系统过滤了大部分常见XSS标签和事件</li>
+                <li>尝试使用不常见的HTML标签，如&lt;details&gt;、&lt;summary&gt;</li>
+                <li>可以尝试使用替代函数，如setTimeout、setInterval</li>
+                <li>HTML实体编码可能有效：&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;</li>
+                <li>尝试SVG标签：&lt;svg&gt;&lt;animateTransform onbegin="alert('XSS')"&gt;</li>
+                <li>利用onerror事件：&lt;img src=x onerror="alert('XSS')"&gt;</li>
+                <li>缓存机制可能会保存恶意内容</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>过滤机制分析</h3>
+            <div class="code-block">
+// 增强版过滤函数
+function advancedFilter(input) {
+    let filtered = input;
+    
+    // 过滤常见XSS标签
+    const dangerousTags = [
+        'script', 'iframe', 'object', 'embed', 'applet',
+        'form', 'input', 'textarea', 'select', 'button'
+    ];
+    
+    dangerousTags.forEach(tag => {
+        const regex = new RegExp(`&lt;\\/?${tag}[^&gt;]*&gt;`, 'gi');
+        filtered = filtered.replace(regex, '');
+    });
+    
+    // 过滤常见事件处理器
+    const events = [
+        'onclick', 'onload', 'onmouseover', 'onmouseout',
+        'onfocus', 'onblur', 'onchange', 'onsubmit'
+    ];
+    
+    events.forEach(event => {
+        const regex = new RegExp(event + '\\s*=', 'gi');
+        filtered = filtered.replace(regex, '');
+    });
+    
+    // 过滤JavaScript协议
+    filtered = filtered.replace(/javascript:/gi, '');
+    
+    // 过滤一些危险函数
+    filtered = filtered.replace(/alert|eval|setTimeout|setInterval/gi, '');
+    
+    return filtered;
+}
+
+// 缓存机制
+const cache = new Map();
+
+function getCachedContent(key) {
+    return cache.get(key);
+}
+
+function setCachedContent(key, content) {
+    // 缓存用户输入（可能包含恶意内容）
+    cache.set(key, content);
+}
+
+// 漏洞分析：
+// 1. 过滤不够全面，仍有绕过可能
+// 2. 缓存机制可能保存恶意内容
+// 3. 某些HTML5标签和事件未被过滤
+// 4. 编码绕过可能有效
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>绕过思路</h3>
+            <div class="alert alert-info">
+                <ul>
+                    <li><strong>标签绕过：</strong>使用不常见的HTML标签如details、summary、dialog</li>
+                    <li><strong>事件绕过：</strong>使用ontoggle、onbegin、onend等不常见事件</li>
+                    <li><strong>编码绕过：</strong>HTML实体编码、Unicode编码</li>
+                    <li><strong>函数绕过：</strong>使用构造函数、字符串拼接等方式</li>
+                    <li><strong>缓存利用：</strong>利用缓存机制保存和执行恶意代码</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>测试区域</h3>
+            
+            <div class="form-group">
+                <label for="payloadInput">绕过过滤器：</label>
+                <textarea id="payloadInput" rows="4" placeholder="输入你的payload来绕过过滤器..." class="payload-input"></textarea>
+                <button onclick="testPayload()" class="btn">测试Payload</button>
+                <button onclick="clearCache()" class="btn btn-danger">清空缓存</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>过滤结果：</h4>
+                <div class="output-box" id="filterResult">
+                    过滤结果将显示在这里
+                </div>
+            </div>
+            
+            <div class="output-area">
+                <h4>执行结果：</h4>
+                <div class="output-box" id="executeResult">
+                    执行结果将显示在这里
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>缓存内容：</label>
+                <textarea id="cacheContent" rows="3" readonly class="code-display"></textarea>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>绕过技巧：</strong>
+                <ul>
+                    <li>SVG动画：&lt;svg&gt;&lt;animateTransform onbegin="alert('XSS')"&gt;</li>
+                    <li>Details标签：&lt;details open ontoggle="alert('XSS')"&gt;</li>
+                    <li>IMG标签：&lt;img src=x onerror="alert('XSS')"&gt;</li>
+                    <li>大小写混合：&lt;ScRiPt&gt;、OnClIcK</li>
+                    <li>HTML实体编码：&amp;#97;lert('XSS')</li>
+                    <li>替代函数：Function('alert("XSS")')()、[].constructor.constructor('alert("XSS")')())</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 缓存系统
+        const cache = new Map();
+        
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！你已完成所有XSS挑战！你已经成为XSS大师！');
+                }, 100);
+            }
+        };
+
+        // 增强版过滤函数
+        function advancedFilter(input) {
+            let filtered = input;
+            
+            // 过滤常见XSS标签
+            const dangerousTags = [
+                'script', 'iframe', 'object', 'embed', 'applet',
+                'form', 'input', 'textarea', 'select', 'button'
+            ];
+            
+            dangerousTags.forEach(tag => {
+                const regex = new RegExp(`<\\/?${tag}[^>]*>`, 'gi');
+                filtered = filtered.replace(regex, '');
+            });
+            
+            // 过滤常见事件处理器
+            const events = [
+                'onclick', 'onload', 'onmouseover', 'onmouseout',
+                'onfocus', 'onblur', 'onchange', 'onsubmit'
+            ];
+            
+            events.forEach(event => {
+                const regex = new RegExp(event + '\\s*=', 'gi');
+                filtered = filtered.replace(regex, '');
+            });
+            
+            // 过滤JavaScript协议
+            filtered = filtered.replace(/javascript:/gi, '');
+            
+            // 过滤一些危险函数（不完全）
+            filtered = filtered.replace(/alert|eval|setTimeout|setInterval/gi, '');
+            
+            return filtered;
+        }
+
+        function getCachedContent(key) {
+            return cache.get(key);
+        }
+
+        function setCachedContent(key, content) {
+            cache.set(key, content);
+            updateCacheDisplay();
+        }
+
+        function updateCacheDisplay() {
+            const cacheEntries = Array.from(cache.entries());
+            const cacheText = cacheEntries.map(([key, value]) => `${key}: ${value}`).join('\n');
+            document.getElementById('cacheContent').value = cacheText || '缓存为空';
+        }
+
+        function testPayload() {
+            const payload = document.getElementById('payloadInput').value;
+            
+            if (!payload.trim()) {
+                alert('请输入payload');
+                return;
+            }
+            
+            // 应用过滤
+            const filtered = advancedFilter(payload);
+            document.getElementById('filterResult').innerHTML = 
+                '<strong>原始输入：</strong><br>' + escapeHtml(payload) + 
+                '<br><br><strong>过滤后：</strong><br>' + escapeHtml(filtered);
+            
+            // 缓存内容
+            const cacheKey = 'payload_' + Date.now();
+            setCachedContent(cacheKey, filtered);
+            
+            // 执行过滤后的内容（存在XSS漏洞）
+            try {
+                document.getElementById('executeResult').innerHTML = filtered;
+            } catch (error) {
+                document.getElementById('executeResult').innerHTML = 
+                    '<span style="color: red;">执行错误: ' + error.message + '</span>';
+            }
+        }
+
+        function clearCache() {
+            cache.clear();
+            updateCacheDisplay();
+            document.getElementById('executeResult').innerHTML = '缓存已清空';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"过滤机制分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            updateCacheDisplay();
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车测试
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.ctrlKey && event.target.id === 'payloadInput') {
+                testPayload();
+            }
+        });
+
+        // 提供一些可能被利用的全局函数
+        window.processData = function(data) {
+            return new Function('return ' + data)();
+        };
+
+        window.renderContent = function(content) {
+            document.getElementById('executeResult').innerHTML = content;
+        };
+    </script>
+
+    <style>
+        .payload-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            resize: vertical;
+        }
+
+        .output-area {
+            margin: 20px 0;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 80px;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        #executeResult {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+
+        #cacheContent {
+            background-color: #e9ecef;
+            border-color: #ced4da;
+            color: #495057;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .alert-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .alert-info li {
+            margin: 5px 0;
+        }
+    </style>
+</body>
+</html>

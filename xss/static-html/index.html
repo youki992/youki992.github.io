@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS挑战靶场</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>🎯 XSS挑战靶场</h1>
+            <p class="subtitle">学习和练习跨站脚本攻击技术</p>
+        </header>
+
+        <div class="challenge-area fade-in">
+            <div class="level-grid">
+                <!-- Level 1 -->
+                <div class="level-card fade-in" id="level1">
+                    <div class="level-number">1</div>
+                    <div class="level-content">
+                        <h3 class="level-title">基础反射型XSS</h3>
+                        <p class="level-description">学习最基本的XSS攻击原理和payload构造</p>
+                        <a href="levels/level1.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 2 -->
+                <div class="level-card fade-in" id="level2">
+                    <div class="level-number">2</div>
+                    <div class="level-content">
+                        <h3 class="level-title">DOM型XSS</h3>
+                        <p class="level-description">通过JavaScript操作DOM来执行XSS攻击</p>
+                        <a href="levels/level2.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 3 -->
+                <div class="level-card fade-in" id="level3">
+                    <div class="level-number">3</div>
+                    <div class="level-content">
+                        <h3 class="level-title">存储型XSS</h3>
+                        <p class="level-description">通过留言板实现持久化XSS攻击</p>
+                        <a href="levels/level3.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 4 -->
+                <div class="level-card fade-in" id="level4">
+                    <div class="level-number">4</div>
+                    <div class="level-content">
+                        <h3 class="level-title">过滤绕过XSS</h3>
+                        <p class="level-description">绕过基础过滤机制实现XSS攻击</p>
+                        <a href="levels/level4.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 5 -->
+                <div class="level-card fade-in" id="level5">
+                    <div class="level-number">5</div>
+                    <div class="level-content">
+                        <h3 class="level-title">属性注入XSS</h3>
+                        <p class="level-description">通过HTML属性注入实现XSS攻击</p>
+                        <a href="levels/level5.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 6 -->
+                <div class="level-card fade-in" id="level6">
+                    <div class="level-number">6</div>
+                    <div class="level-content">
+                        <h3 class="level-title">JavaScript协议XSS</h3>
+                        <p class="level-description">利用JavaScript协议实现XSS攻击</p>
+                        <a href="levels/level6.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 7 -->
+                <div class="level-card fade-in" id="level7">
+                    <div class="level-number">7</div>
+                    <div class="level-content">
+                        <h3 class="level-title">CSP绕过XSS</h3>
+                        <p class="level-description">绕过内容安全策略实现XSS攻击</p>
+                        <a href="levels/level7.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+
+                <!-- Level 8 -->
+                <div class="level-card fade-in" id="level8">
+                    <div class="level-number">8</div>
+                    <div class="level-content">
+                        <h3 class="level-title">增强版缓存中毒XSS</h3>
+                        <p class="level-description">绕过多重过滤机制，利用缓存机制进行高级XSS攻击</p>
+                        <a href="levels/level8.html" class="btn">开始挑战</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenge-description fade-in">
+                <h3>🎓 学习目标</h3>
+                <p>通过8个精心设计的XSS挑战关卡，您将学习到：</p>
+                <ul>
+                    <li><strong>反射型XSS</strong> - 理解XSS攻击的基本原理</li>
+                    <li><strong>DOM型XSS</strong> - 掌握客户端XSS攻击技术</li>
+                    <li><strong>存储型XSS</strong> - 学习持久化XSS攻击方法</li>
+                    <li><strong>过滤绕过</strong> - 突破各种安全过滤机制</li>
+                    <li><strong>属性注入</strong> - 利用HTML属性进行攻击</li>
+                    <li><strong>协议利用</strong> - 使用JavaScript协议执行代码</li>
+                    <li><strong>CSP绕过</strong> - 绕过内容安全策略限制</li>
+                    <li><strong>高级技巧</strong> - 综合运用多种绕过技术</li>
+                </ul>
+            </div>
+
+            <div class="navigation fade-in">
+                <a href="celebration.html" class="btn btn-success">🎉 查看完成庆祝</a>
+                <button onclick="window.location.reload()" class="btn btn-secondary">🔄 刷新页面</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用 | ⚠️ 请勿用于非法用途</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级1 - 基础反射型XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级1 - 基础反射型XSS</h1>
+            <p class="subtitle">学习最基础的XSS攻击技术</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 简单 | 1/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>反射型XSS是最常见的XSS攻击类型。用户输入被直接反射到页面中，没有经过任何过滤或转义。你的目标是构造一个payload来执行JavaScript代码。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>在输入框中输入恶意代码，使页面弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>用户输入直接输出到页面，没有任何过滤</li>
+                <li>尝试输入HTML标签，观察页面变化</li>
+                <li>使用&lt;script&gt;标签来执行JavaScript代码</li>
+                <li>目标是弹出包含"XSS"的警告框</li>
+                <li>示例payload：<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>漏洞代码分析</h3>
+            <div class="code-block">
+// 前端代码
+&lt;form method="get"&gt;
+    &lt;input type="text" name="name" placeholder="请输入你的名字"&gt;
+    &lt;button type="submit"&gt;提交&lt;/button&gt;
+&lt;/form&gt;
+
+// 输出用户输入（存在XSS漏洞）
+&lt;div&gt;你好，&lt;span id="output"&gt;&lt;/span&gt;&lt;/div&gt;
+
+&lt;script&gt;
+// 获取URL参数并直接输出（危险操作）
+const urlParams = new URLSearchParams(window.location.search);
+const name = urlParams.get('name') || '';
+document.getElementById('output').innerHTML = name;
+&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>测试区域</h3>
+            <form method="get" action="">
+                <div class="form-group">
+                    <label for="name">请输入你的名字：</label>
+                    <input type="text" id="name" name="name" class="payload-input" placeholder="在这里输入你的payload...">
+                    <button type="submit" class="btn">提交</button>
+                </div>
+            </form>
+            
+            <div class="output-area">
+                <h4>输出结果：</h4>
+                <div class="output-box">
+                    你好，<span id="output"></span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！XSS攻击成功！你已经掌握了基础反射型XSS技术！');
+                }, 100);
+            }
+        };
+
+        // 获取URL参数并输出
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name') || '';
+        document.getElementById('output').innerHTML = name;
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"漏洞代码分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

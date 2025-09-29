@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级2 - DOM型XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级2 - DOM型XSS</h1>
+            <p class="subtitle">通过JavaScript操作DOM来执行XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 简单 | 2/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>DOM型XSS发生在客户端，通过JavaScript操作DOM来执行恶意代码。与反射型XSS不同，DOM型XSS的payload不会发送到服务器，而是在客户端直接执行。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>通过URL参数注入恶意代码，使页面弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>观察URL中的id参数是如何被处理的</li>
+                <li>JavaScript使用innerHTML直接输出用户输入</li>
+                <li>尝试在URL中添加id参数，如：?id=test</li>
+                <li>构造包含HTML标签的payload</li>
+                <li>示例URL：level2.html?id=&lt;script&gt;alert('XSS')&lt;/script&gt;</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>漏洞代码分析</h3>
+            <div class="code-block">
+// JavaScript DOM操作代码
+function displayContent() {
+    // 从URL中获取id参数
+    const urlParams = new URLSearchParams(window.location.search);
+    let id = urlParams.get('id') || '';
+    
+    // URL解码
+    id = decodeURIComponent(id);
+    
+    // 直接使用innerHTML输出（存在XSS漏洞）
+    document.getElementById('content').innerHTML = 
+        '用户ID: ' + id;
+}
+
+// 页面加载时执行
+window.onload = displayContent;
+
+// 漏洞分析：
+// 1. 直接从URL获取参数
+// 2. 使用innerHTML输出，允许HTML标签执行
+// 3. 没有任何输入验证或输出编码
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>测试区域</h3>
+            <p>当前URL参数显示：</p>
+            <div class="output-area">
+                <div class="output-box" id="content">
+                    <!-- 内容将通过JavaScript动态插入 -->
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>构造恶意URL：</label>
+                <input type="text" id="urlInput" class="payload-input" 
+                       placeholder="输入id参数的值..." 
+                       onkeyup="updateURL()">
+                <button onclick="testPayload()" class="btn">测试Payload</button>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>DOM XSS特点：</strong>
+                <ul>
+                    <li>完全在客户端执行，不经过服务器</li>
+                    <li>通过JavaScript操作DOM来触发</li>
+                    <li>常见于单页应用(SPA)和前端路由</li>
+                    <li>payload通常在URL片段或参数中</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！DOM XSS攻击成功！你已经掌握了DOM型XSS技术！');
+                }, 100);
+            }
+        };
+
+        // DOM XSS漏洞函数
+        function displayContent() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let id = urlParams.get('id') || '';
+            
+            // URL解码
+            id = decodeURIComponent(id);
+            
+            // 存在XSS漏洞的代码
+            document.getElementById('content').innerHTML = '用户ID: ' + id;
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"漏洞代码分析"部分显示，请查看上方的代码块。');
+        }
+
+        function updateURL() {
+            const input = document.getElementById('urlInput').value;
+            const currentURL = window.location.href.split('?')[0];
+            const newURL = input ? `${currentURL}?id=${encodeURIComponent(input)}` : currentURL;
+            document.getElementById('urlInput').placeholder = `完整URL: ${newURL}`;
+        }
+
+        function testPayload() {
+            const input = document.getElementById('urlInput').value;
+            if (input) {
+                const currentURL = window.location.href.split('?')[0];
+                window.location.href = `${currentURL}?id=${encodeURIComponent(input)}`;
+            } else {
+                alert('请先输入要测试的payload');
+            }
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            displayContent();
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+    </script>
+</body>
+</html>

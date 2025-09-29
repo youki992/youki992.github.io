@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级3 - 存储型XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级3 - 存储型XSS</h1>
+            <p class="subtitle">通过留言板实现持久化XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 中等 | 3/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>存储型XSS是最危险的XSS类型，恶意代码被永久存储在服务器上，每当用户访问包含恶意代码的页面时都会执行攻击。这种攻击影响所有访问该页面的用户。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>在留言板中提交恶意代码，使其被存储并在页面显示时执行，弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>留言内容直接显示在页面上，没有过滤</li>
+                <li>可以在留言中插入HTML标签和JavaScript代码</li>
+                <li>尝试提交包含&lt;script&gt;标签的留言</li>
+                <li>也可以尝试事件处理器，如onclick、onload等</li>
+                <li>示例payload：&lt;script&gt;alert('XSS')&lt;/script&gt;</li>
+                <li>或者：&lt;img src=x onerror="alert('XSS')"&gt;</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>漏洞代码分析</h3>
+            <div class="code-block">
+// 模拟服务器端存储逻辑
+function addComment(name, message) {
+    // 直接存储用户输入，没有任何过滤（存在XSS漏洞）
+    const comment = {
+        id: Date.now(),
+        name: name,
+        message: message,  // 危险：直接存储原始输入
+        timestamp: new Date().toLocaleString()
+    };
+    
+    // 存储到本地存储（模拟数据库）
+    let comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    comments.push(comment);
+    localStorage.setItem('comments', JSON.stringify(comments));
+    
+    return comment;
+}
+
+// 显示留言的函数
+function displayComments() {
+    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    const container = document.getElementById('comments');
+    
+    container.innerHTML = '';
+    comments.forEach(comment => {
+        // 危险：直接使用innerHTML输出用户数据
+        container.innerHTML += `
+            &lt;div class="comment"&gt;
+                &lt;strong&gt;${comment.name}&lt;/strong&gt;
+                &lt;span class="timestamp"&gt;${comment.timestamp}&lt;/span&gt;
+                &lt;p&gt;${comment.message}&lt;/p&gt;  // XSS漏洞点
+            &lt;/div&gt;
+        `;
+    });
+}
+
+// 漏洞分析：
+// 1. 用户输入直接存储，没有验证或过滤
+// 2. 显示时使用innerHTML，允许HTML/JS执行
+// 3. 影响所有访问页面的用户（持久化攻击）
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>留言板测试区域</h3>
+            
+            <div class="form-group">
+                <label for="nameInput">姓名：</label>
+                <input type="text" id="nameInput" placeholder="输入您的姓名" value="测试用户">
+            </div>
+            
+            <div class="form-group">
+                <label for="messageInput">留言内容：</label>
+                <textarea id="messageInput" rows="4" placeholder="在这里输入您的留言...可以尝试插入HTML标签"></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="submitComment()" class="btn">提交留言</button>
+                <button onclick="clearComments()" class="btn btn-danger">清空留言</button>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>存储型XSS特点：</strong>
+                <ul>
+                    <li>恶意代码被永久存储在服务器</li>
+                    <li>影响所有访问该页面的用户</li>
+                    <li>攻击持续时间长，危害最大</li>
+                    <li>常见于留言板、评论系统、用户资料等</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>留言列表</h3>
+            <div id="comments" class="comments-container">
+                <!-- 留言将动态显示在这里 -->
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！存储型XSS攻击成功！你已经掌握了存储型XSS技术！');
+                }, 100);
+            }
+        };
+
+        // 存储型XSS漏洞函数
+        function addComment(name, message) {
+            const comment = {
+                id: Date.now(),
+                name: name,
+                message: message,  // 直接存储，存在XSS漏洞
+                timestamp: new Date().toLocaleString()
+            };
+            
+            let comments = JSON.parse(localStorage.getItem('comments') || '[]');
+            comments.push(comment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+            
+            return comment;
+        }
+
+        function displayComments() {
+            const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+            const container = document.getElementById('comments');
+            
+            container.innerHTML = '';
+            comments.forEach(comment => {
+                // 存在XSS漏洞的代码
+                container.innerHTML += `
+                    <div class="comment">
+                        <div class="comment-header">
+                            <strong>${comment.name}</strong>
+                            <span class="timestamp">${comment.timestamp}</span>
+                        </div>
+                        <div class="comment-body">
+                            ${comment.message}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (comments.length === 0) {
+                container.innerHTML = '<p class="no-comments">暂无留言，快来发表第一条留言吧！</p>';
+            }
+        }
+
+        function submitComment() {
+            const name = document.getElementById('nameInput').value.trim();
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!name || !message) {
+                alert('请填写姓名和留言内容');
+                return;
+            }
+            
+            addComment(name, message);
+            displayComments();
+            
+            // 清空输入框
+            document.getElementById('messageInput').value = '';
+            
+            alert('留言提交成功！');
+        }
+
+        function clearComments() {
+            if (confirm('确定要清空所有留言吗？')) {
+                localStorage.removeItem('comments');
+                displayComments();
+                alert('留言已清空');
+            }
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"漏洞代码分析"部分显示，请查看上方的代码块。');
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            displayComments();
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车提交留言
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.ctrlKey) {
+                submitComment();
+            }
+        });
+    </script>
+
+    <style>
+        .comments-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+
+        .comment {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comment-header strong {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .comment-body {
+            color: #444;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</body>
+</html>

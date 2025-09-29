@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等级7 - CSP绕过XSS</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- 模拟CSP策略 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none';">
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <h1>等级7 - CSP绕过XSS</h1>
+            <p class="subtitle">绕过内容安全策略实现XSS攻击</p>
+        </header>
+
+        <div class="navigation fade-in">
+            <a href="../index.html" class="btn btn-secondary">← 返回主页</a>
+            <span class="level-info">难度: 困难 | 7/8</span>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h2>挑战描述</h2>
+            <p>内容安全策略(CSP)是一种重要的XSS防护机制，通过限制资源加载来源来防止恶意脚本执行。但是，不当配置的CSP可能存在绕过方法。这个挑战模拟了一个配置了CSP但仍存在XSS漏洞的场景。</p>
+            
+            <div class="alert alert-info">
+                <strong>目标：</strong>在CSP保护下，找到绕过方法执行JavaScript代码并弹出包含"XSS"的警告框。
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="toggleHints()">显示提示</button>
+                <button class="btn-secondary" onclick="showSource()">查看源码</button>
+                <button class="btn-secondary" onclick="showCSP()">查看CSP策略</button>
+            </div>
+        </div>
+
+        <div class="hint-box fade-in" id="hints" style="display: none;">
+            <div class="hint-title">💡 提示</div>
+            <ul>
+                <li>当前CSP策略允许'unsafe-inline'，可以执行内联脚本</li>
+                <li>尝试使用内联事件处理器，如onclick、onload等</li>
+                <li>可以利用现有的JavaScript函数或全局变量</li>
+                <li>尝试构造不需要外部资源的payload</li>
+                <li>示例：&lt;img src=x onerror="alert('XSS')"&gt;</li>
+                <li>或者：&lt;svg onload="alert('XSS')"&gt;</li>
+                <li>也可以尝试：&lt;details open ontoggle="alert('XSS')"&gt;</li>
+                <li>利用现有函数：onclick="eval('alert(\\'XSS\\')')"</li>
+            </ul>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>CSP策略分析</h3>
+            <div class="code-block">
+// 当前CSP策略：
+// Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none';
+
+// CSP策略解析：
+// default-src 'self'     - 默认只允许同源资源
+// script-src 'self' 'unsafe-inline' - 允许同源脚本和内联脚本
+// object-src 'none'      - 禁止所有object、embed、applet
+
+// 漏洞分析：
+// 1. 'unsafe-inline'允许内联JavaScript执行
+// 2. 可以使用事件处理器属性
+// 3. 可以利用现有的JavaScript上下文
+// 4. 不需要加载外部脚本资源
+
+// 绕过方法：
+// 1. 内联事件处理器：onclick、onload、onerror等
+// 2. 利用HTML5新标签：details、summary等
+// 3. 使用现有的全局函数：eval、setTimeout等
+// 4. 数据URI：data:text/html,&lt;script&gt;alert('XSS')&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>数据展示测试区域</h3>
+            
+            <div class="form-group">
+                <label for="dataInput">数据内容：</label>
+                <textarea id="dataInput" rows="3" placeholder="输入要显示的数据..." class="payload-input">欢迎访问我们的网站！</textarea>
+                <button onclick="displayData()" class="btn">显示数据</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>数据显示区域：</h4>
+                <div class="output-box" id="dataContainer">
+                    欢迎访问我们的网站！
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>CSP违规报告：</label>
+                <textarea id="cspReport" rows="4" readonly class="code-display" placeholder="CSP违规将在这里显示..."></textarea>
+            </div>
+        </div>
+
+        <div class="challenge-area fade-in">
+            <h3>模板渲染测试区域</h3>
+            
+            <div class="form-group">
+                <label for="templateInput">模板内容：</label>
+                <textarea id="templateInput" rows="4" placeholder="输入HTML模板..." class="payload-input">&lt;div class="welcome"&gt;
+    &lt;h3&gt;用户信息&lt;/h3&gt;
+    &lt;p&gt;姓名：张三&lt;/p&gt;
+    &lt;p&gt;邮箱：zhangsan@example.com&lt;/p&gt;
+&lt;/div&gt;</textarea>
+                <button onclick="renderTemplate()" class="btn">渲染模板</button>
+            </div>
+            
+            <div class="output-area">
+                <h4>模板渲染结果：</h4>
+                <div class="output-box" id="templateContainer">
+                    <div class="welcome">
+                        <h3>用户信息</h3>
+                        <p>姓名：张三</p>
+                        <p>邮箱：zhangsan@example.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>CSP绕过技巧：</strong>
+                <ul>
+                    <li>利用'unsafe-inline'：内联事件处理器</li>
+                    <li>HTML5新特性：details、summary、dialog等</li>
+                    <li>利用现有上下文：全局函数、变量</li>
+                    <li>数据URI：在允许的情况下使用data:协议</li>
+                    <li>JSONP：利用script-src 'self'加载同源JSONP</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 XSS挑战靶场 | 仅供学习使用</p>
+        </footer>
+    </div>
+
+    <script>
+        // CSP违规报告收集
+        let cspViolations = [];
+        
+        // 监听CSP违规事件
+        document.addEventListener('securitypolicyviolation', function(event) {
+            const violation = {
+                blockedURI: event.blockedURI,
+                violatedDirective: event.violatedDirective,
+                originalPolicy: event.originalPolicy,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            cspViolations.push(violation);
+            updateCSPReport();
+        });
+
+        function updateCSPReport() {
+            const report = cspViolations.map(v => 
+                `[${v.timestamp}] 违规指令: ${v.violatedDirective}, 被阻止的URI: ${v.blockedURI}`
+            ).join('\n');
+            
+            document.getElementById('cspReport').value = report || '暂无CSP违规报告';
+        }
+
+        // 重写alert函数以检测XSS成功
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            originalAlert(message);
+            if (message && message.toString().toLowerCase().includes('xss')) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！CSP绕过XSS攻击成功！你已经掌握了CSP绕过技术！');
+                }, 100);
+            }
+        };
+
+        // CSP绕过XSS漏洞函数
+        function displayData(data) {
+            const input = data || document.getElementById('dataInput').value;
+            
+            // 存在XSS漏洞：直接使用innerHTML
+            document.getElementById('dataContainer').innerHTML = input;
+        }
+
+        function renderTemplate() {
+            const template = document.getElementById('templateInput').value;
+            
+            if (!template.trim()) {
+                alert('请输入模板内容');
+                return;
+            }
+            
+            // 存在XSS漏洞：直接渲染用户输入的HTML
+            document.getElementById('templateContainer').innerHTML = template;
+        }
+
+        // 页面功能函数
+        function toggleHints() {
+            const hints = document.getElementById('hints');
+            hints.style.display = hints.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSource() {
+            alert('源码已在"CSP策略分析"部分显示，请查看上方的代码块。');
+        }
+
+        function showCSP() {
+            const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
+            alert('当前CSP策略：\n' + csp);
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            // 初始化CSP报告
+            updateCSPReport();
+            
+            // 页面加载动画
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        };
+
+        // 回车提交
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.ctrlKey) {
+                if (event.target.id === 'dataInput') {
+                    displayData();
+                } else if (event.target.id === 'templateInput') {
+                    renderTemplate();
+                }
+            }
+        });
+
+        // 提供一些全局函数供绕过使用
+        window.globalEval = function(code) {
+            return eval(code);
+        };
+
+        window.executeCode = function(code) {
+            return new Function(code)();
+        };
+    </script>
+
+    <style>
+        .payload-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            resize: vertical;
+        }
+
+        .output-area {
+            margin: 20px 0;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 80px;
+            word-wrap: break-word;
+        }
+
+        .welcome {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .welcome h3 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .welcome p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        #cspReport {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+    </style>
+</body>
+</html>

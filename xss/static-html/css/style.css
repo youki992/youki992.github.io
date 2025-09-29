@@ -1,0 +1,381 @@
+/**
+ * XSS挑战靶场样式文件
+ * 现代化响应式设计
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #7f8c8d;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    background: #ecf0f1;
+    border-radius: 25px;
+    height: 10px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    height: 100%;
+    border-radius: 25px;
+    transition: width 0.3s ease;
+}
+
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.level-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.level-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.level-card.completed {
+    border-color: #2ecc71;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.level-card.current {
+    border-color: #3498db;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.level-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.level-number {
+    font-size: 2em;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.level-title {
+    font-size: 1.3em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.level-description {
+    color: #7f8c8d;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.level-difficulty {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.difficulty-easy { background: #d5f4e6; color: #27ae60; }
+.difficulty-medium { background: #fef9e7; color: #f39c12; }
+.difficulty-hard { background: #fadbd8; color: #e74c3c; }
+.difficulty-expert { background: #e8daef; color: #8e44ad; }
+
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.btn-success:hover {
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+}
+
+.btn-secondary:hover {
+    box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+}
+
+.btn-disabled {
+    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 锁定状态的关卡卡片 */
+.level-card.locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.level-card.locked .level-title,
+.level-card.locked .level-description {
+    color: #7f8c8d;
+}
+
+.level-card.locked .level-number {
+    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+}
+
+.progress-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #f39c12;
+}
+
+.challenge-area {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #d5f4e6;
+    color: #27ae60;
+    border-left: 4px solid #27ae60;
+}
+
+.alert-info {
+    background: #d6eaf8;
+    color: #2980b9;
+    border-left: 4px solid #2980b9;
+}
+
+.alert-warning {
+    background: #fef9e7;
+    color: #f39c12;
+    border-left: 4px solid #f39c12;
+}
+
+.hint-box {
+    background: rgba(52, 152, 219, 0.1);
+    border: 1px solid #3498db;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.hint-title {
+    font-weight: 600;
+    color: #2980b9;
+    margin-bottom: 10px;
+}
+
+.code-block {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.status-completed {
+    background: #d5f4e6;
+    color: #27ae60;
+}
+
+.status-current {
+    background: #d6eaf8;
+    color: #2980b9;
+}
+
+.status-locked {
+    background: #fadbd8;
+    color: #e74c3c;
+}
+
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 50px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .level-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .navigation {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* XSS演示区域 */
+.xss-demo {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    min-height: 100px;
+}
+
+.payload-input {
+    font-family: 'Courier New', monospace;
+    background: #2c3e50;
+    color: #ecf0f1;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+}
