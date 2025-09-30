@@ -472,8 +472,8 @@ function update() {
         });
     });
     
-    // 检查关卡完成条件
-    if (enemies.length === 0 && enemySpawnTimer > 5000) {
+    // 检查关卡完成条件 - 基于分数而不是敌人数量
+    if (score >= 3000) {
         levelComplete();
         return;
     }
