@@ -473,7 +473,8 @@ function update() {
     });
     
     // 检查关卡完成条件 - 基于分数而不是敌人数量
-    if (score >= 3000) {
+    if (score >= 3000 && gameState === 'playing') {
+        console.log('关卡完成！分数达到:', score); // 调试信息
         levelComplete();
         return;
     }
@@ -583,6 +584,10 @@ function togglePause() {
 }
 
 // 关卡完成
+/**
+ * 关卡完成处理函数
+ * 当玩家达到3000分时触发，显示关卡完成界面
+ */
 function levelComplete() {
     gameState = 'gameover';
     cancelAnimationFrame(gameLoop);
@@ -590,10 +595,10 @@ function levelComplete() {
     // 显示关卡完成界面
     showGameOver(true);
     
-    // 跳转到教程页面（延迟2秒）
-    setTimeout(() => {
-        window.location.href = `tutorial.html?level=${currentLevel}`;
-    }, 2000);
+    // 移除自动跳转，让玩家选择是否进入下一关
+    // setTimeout(() => {
+    //     window.location.href = `tutorial.html?level=${currentLevel}`;
+    // }, 2000);
 }
 
 // 游戏结束
