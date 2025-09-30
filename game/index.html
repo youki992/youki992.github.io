@@ -278,6 +278,7 @@
             <div class="hud-panel">
                 <div class="score-display orbitron">SCORE: <span id="score">0</span></div>
                 <div style="color: #e3f2fd; font-size: 12px; margin-top: 5px;">连击: <span id="combo">0</span>x</div>
+                <div style="color: #00e5ff; font-size: 11px; margin-top: 3px;">过关目标: 3000分</div>
             </div>
         </div>
         
@@ -300,6 +301,18 @@
             <div class="final-score orbitron">最终得分: <span id="finalScore">0</span></div>
             <button class="cyber-button next-level-btn orbitron" onclick="nextLevel()">下一关</button>
             <button class="cyber-button orbitron" onclick="restartGame()">重新开始</button>
+            <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
+        </div>
+        
+        <!-- 暂停界面 -->
+        <div class="game-over" id="pauseScreen" style="display: none;">
+            <div class="victory-message orbitron">游戏暂停</div>
+            <div style="color: #e3f2fd; margin: 20px 0; text-align: center;">
+                当前得分: <span id="pauseScore" class="orbitron">0</span><br>
+                过关目标: <span class="orbitron" style="color: #00e5ff;">3000分</span>
+            </div>
+            <button class="cyber-button orbitron" onclick="resumeGame()">继续游戏</button>
+            <button class="cyber-button orbitron" onclick="restartCurrentLevel()">重新开始本关</button>
             <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
         </div>
         
@@ -372,6 +385,24 @@
             event.target.textContent = `音效: ${soundEnabled ? '开' : '关'}`;
         }
         
+        // 继续游戏（从暂停状态）
+        function resumeGame() {
+            document.getElementById('pauseScreen').style.display = 'none';
+            gameState = 'playing'; // 确保游戏状态正确设置
+            lastTime = Date.now(); // 重置时间以避免跳跃
+            gameLoop = requestAnimationFrame(update); // 重新启动游戏循环
+        }
+        
+        // 重新开始当前关卡
+        function restartCurrentLevel() {
+            document.getElementById('pauseScreen').style.display = 'none';
+            score = 0;
+            health = 100;
+            updateHUD();
+            gameState = 'playing';
+            initLevel(currentLevel);
+        }
+        
         // 下一关
         function nextLevel() {
             currentLevel++;
@@ -429,6 +460,21 @@
         document.addEventListener('keydown', function(event) {
             if (gameState === 'playing') {
                 handleKeyDown(event);
+                
+                // P键暂停游戏
+                if (event.key === 'p' || event.key === 'P') {
+                    document.getElementById('pauseScore').textContent = score;
+                    document.getElementById('pauseScreen').style.display = 'flex';
+                    togglePause();
+                }
+            }
+            
+            // ESC键返回主菜单
+            if (event.key === 'Escape') {
+                if (gameState === 'paused') {
+                    document.getElementById('pauseScreen').style.display = 'none';
+                }
+                backToMenu();
             }
         });
         
