@@ -299,6 +299,7 @@
         <div class="game-over" id="gameOver">
             <div class="victory-message orbitron" id="victoryMessage">关卡完成！</div>
             <div class="final-score orbitron">最终得分: <span id="finalScore">0</span></div>
+            <button class="cyber-button orbitron" onclick="goToTutorial()">查看教程</button>
             <button class="cyber-button next-level-btn orbitron" onclick="nextLevel()">下一关</button>
             <button class="cyber-button orbitron" onclick="restartGame()">重新开始</button>
             <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
@@ -404,6 +405,14 @@
         }
         
         // 下一关
+        /**
+         * 跳转到教程页面
+         * 根据当前关卡显示对应的教程内容
+         */
+        function goToTutorial() {
+            window.location.href = `tutorial.html?level=${currentLevel}`;
+        }
+        
         function nextLevel() {
             currentLevel++;
             if (currentLevel <= 3) {
@@ -442,13 +451,23 @@
             document.getElementById('currentLevel').textContent = currentLevel;
         }
         
-        // 显示游戏结束
+        /**
+         * 显示游戏结束界面
+         * @param {boolean} victory - 是否胜利
+         */
         function showGameOver(victory) {
             gameState = 'gameover';
             document.getElementById('gameOver').style.display = 'flex';
-            document.getElementById('victoryMessage').textContent = victory ? '关卡完成！' : '游戏结束';
+            
+            if (victory) {
+                document.getElementById('victoryMessage').textContent = '关卡完成！达到3000分！';
+            } else {
+                document.getElementById('victoryMessage').textContent = '游戏结束';
+            }
+            
             document.getElementById('finalScore').textContent = score;
             
+            // 根据当前关卡显示或隐藏下一关按钮
             if (currentLevel >= 3) {
                 document.querySelector('.next-level-btn').style.display = 'none';
             } else {
