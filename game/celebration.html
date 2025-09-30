@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 网络安全卫士胜利庆祝 </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 50%, #283593 100%);
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+            color: #e3f2fd;
+        }
+        
+        .orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .celebration-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .space-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('resources/space_background.png') center/cover;
+            z-index: 1;
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: sparkle 2s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .network-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 8s linear infinite;
+            z-index: 3;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            padding: 40px;
+        }
+        
+        .celebration-title {
+            font-size: 64px;
+            font-weight: 900;
+            color: #00e5ff;
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
+            margin-bottom: 20px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 30px rgba(0, 229, 255, 0.8); }
+            to { text-shadow: 0 0 40px rgba(0, 229, 255, 1), 0 0 60px rgba(0, 229, 255, 0.8); }
+        }
+        
+        .achievement-subtitle {
+            font-size: 28px;
+            color: #00ff9d;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(0, 255, 157, 0.6);
+        }
+        
+        .graduation-message {
+            font-size: 20px;
+            color: #e3f2fd;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            background: rgba(26, 35, 126, 0.8);
+            border: 1px solid #00e5ff;
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background: rgba(40, 53, 147, 0.8);
+            border: 1px solid #00ff9d;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.4);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #00e5ff;
+            display: block;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+        }
+        
+        .stat-label {
+            color: #e3f2fd;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .qr-section {
+            background: rgba(26, 35, 126, 0.9);
+            border: 2px solid #00e5ff;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+        }
+        
+        .qr-title {
+            font-size: 32px;
+            color: #00ff9d;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .qr-image {
+            width: 250px;
+            height: 250px;
+            border: 3px solid #00e5ff;
+            border-radius: 15px;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            animation: qrPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes qrPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .qr-instruction {
+            font-size: 18px;
+            color: #e3f2fd;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        
+        .cyber-button {
+            background: linear-gradient(45deg, #1a237e, #283593);
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            padding: 18px 36px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+            display: inline-block;
+            text-decoration: none;
+            margin: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+        
+        .cyber-button:hover {
+            background: linear-gradient(45deg, #283593, #3949ab);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .restart-btn {
+            background: linear-gradient(45deg, #2e7d32, #4caf50);
+            border: 2px solid #00ff9d;
+            color: #00ff9d;
+        }
+        
+        .restart-btn:hover {
+            background: linear-gradient(45deg, #388e3c, #66bb6a);
+            box-shadow: 0 0 40px rgba(0, 255, 157, 0.8);
+        }
+        
+        .fireworks-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 6;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #00e5ff;
+            animation: confetti-fall 3s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .achievement-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 157, 0.9);
+            color: #0a0e27;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
+            animation: badgeGlow 2s ease-in-out infinite alternate;
+            z-index: 20;
+        }
+        
+        @keyframes badgeGlow {
+            from { box-shadow: 0 0 20px rgba(0, 255, 157, 0.6); }
+            to { box-shadow: 0 0 30px rgba(0, 255, 157, 1); }
+        }
+        
+        .learning-resources {
+            background: rgba(40, 53, 147, 0.8);
+            border: 1px solid #00ff9d;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .resource-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.3);
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .resource-list li::before {
+            content: '📚';
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .resource-link {
+            color: #00e5ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .resource-link:hover {
+            color: #00ff9d;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .celebration-title {
+                font-size: 42px;
+            }
+            
+            .achievement-subtitle {
+                font-size: 22px;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .qr-image {
+                width: 2280px;
+                height: 1280px;
+            }
+            
+            .cyber-button {
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="celebration-container">
+        <!-- 背景效果 -->
+        <div class="space-bg"></div>
+        <div class="stars"></div>
+        <div class="network-grid"></div>
+        
+        <!-- 烟花和彩带容器 -->
+        <div class="fireworks-container" id="fireworks"></div>
+        <div class="confetti-container" id="confetti"></div>
+        
+        <!-- 成就徽章 -->
+        <div class="achievement-badge orbitron">
+            🏆 网络安全卫士
+        </div>
+        
+        <!-- 主要内容 -->
+        <div class="content-wrapper">
+            <h1 class="celebration-title orbitron">🎉 恭喜通关！🎉</h1>
+            <div class="achievement-subtitle orbitron">网络安全卫士毕业认证</div>
+            
+            <div class="graduation-message">
+                <p>🌟 <strong>太棒了！</strong> 你已成功完成了所有三个关卡的网络安全挑战！</p>
+                <p>通过这次冒险，你不仅体验了紧张刺激的太空战斗，更重要的是学习了三种最常见的网络安全漏洞：</p>
+                <ul style="text-align: left; margin: 20px 0; padding-left: 30px;">
+                    <li><strong style="color: #ff6f00;">SQL注入漏洞</strong> - 数据库安全的第一道防线</li>
+                    <li><strong style="color: #00ff9d;">XSS跨站脚本漏洞</strong> - 前端安全的保护屏障</li>
+                    <li><strong style="color: #ff1744;">命令执行漏洞</strong> - 服务器安全的最后防线</li>
+                </ul>
+                <p>现在你已经成为一名合格的网络安全卫士，具备了识别和防御这些漏洞的基本能力！</p>
+            </div>
+            
+            <!-- 游戏统计 -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-number orbitron" id="totalScore">0</span>
+                    <div class="stat-label">总分</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number orbitron" id="totalTime">0</span>
+                    <div class="stat-label">总用时(秒)</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number orbitron" id="enemiesDefeated">0</span>
+                    <div class="stat-label">击败漏洞怪物</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number orbitron" id="powerUpsCollected">0</span>
+                    <div class="stat-label">收集道具</div>
+                </div>
+            </div>
+            
+            <!-- QQ群二维码 -->
+            <div class="qr-section">
+                <div class="qr-title orbitron">加入网络安全学习群</div>
+                <img src="resources/qq_group_qr.png" alt="QQ群二维码" class="qr-image">
+                <div class="qr-instruction">
+                    <p><strong>扫描二维码加入我们的网络安全学习群</strong></p>
+                    <p>在这里你可以：</p>
+                    <ul style="text-align: left; margin: 15px 0; padding-left: 30px;">
+                        <li>与志同道合的安全爱好者交流学习</li>
+                        <li>获取最新的网络安全资讯和技术分享</li>
+                        <li>参与CTF比赛和安全挑战活动</li>
+                        <li>获得专业安全工程师的指导</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 学习资源 -->
+            <div class="learning-resources">
+                <h3 style="color: #00ff9d; font-size: 24px; margin-bottom: 20px; text-align: center;">
+                    📚 推荐学习资源
+                </h3>
+                <ul class="resource-list">
+                    <li><a href="#" class="resource-link">OWASP Top 10 官方文档</a> - Web应用安全风险指南</li>
+                    <li><a href="#" class="resource-link">网络安全基础教程</a> - 从零开始学习网络安全</li>
+                    <li><a href="#" class="resource-link">渗透测试实战指南</a> - 专业的渗透测试技术</li>
+                    <li><a href="#" class="resource-link">代码安全审计</a> - 如何编写安全的代码</li>
+                    <li><a href="#" class="resource-link">CTF比赛平台</a> - 实战练习安全技能</li>
+                </ul>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div style="margin-top: 40px;">
+                <button class="cyber-button restart-btn orbitron" onclick="restartGame()">
+                    🎮 重新开始冒险
+                </button>
+                <button class="cyber-button orbitron" onclick="shareAchievement()">
+                    📱 分享成就
+                </button>
+                <!-- <button class="cyber-button orbitron" onclick="downloadCertificate()">
+                    🏅 下载证书
+                </button> -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 游戏统计数据（模拟）
+        const gameStats = {
+            totalScore: Math.floor(Math.random() * 50000) + 30000,
+            totalTime: Math.floor(Math.random() * 600) + 300,
+            enemiesDefeated: Math.floor(Math.random() * 100) + 80,
+            powerUpsCollected: Math.floor(Math.random() * 15) + 8
+        };
+        
+        // 更新统计显示
+        function updateStats() {
+            document.getElementById('totalScore').textContent = gameStats.totalScore.toLocaleString();
+            document.getElementById('totalTime').textContent = gameStats.totalTime;
+            document.getElementById('enemiesDefeated').textContent = gameStats.enemiesDefeated;
+            document.getElementById('powerUpsCollected').textContent = gameStats.powerUpsCollected;
+        }
+        
+        // 创建烟花效果
+        function createFireworks() {
+            const container = document.getElementById('fireworks');
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.style.position = 'absolute';
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.top = Math.random() * 50 + '%';
+                    firework.style.width = '4px';
+                    firework.style.height = '4px';
+                    firework.style.background = '#00e5ff';
+                    firework.style.borderRadius = '50%';
+                    firework.style.boxShadow = '0 0 10px #00e5ff';
+                    
+                    container.appendChild(firework);
+                    
+                    // 烟花爆炸动画
+                    anime({
+                        targets: firework,
+                        scale: [0, 20],
+                        opacity: [1, 0],
+                        duration: 1500,
+                        easing: 'easeOutQuart',
+                        complete: function() {
+                            firework.remove();
+                        }
+                    });
+                }, i * 1000);
+            }
+        }
+        
+        // 创建彩带效果
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#00e5ff', '#00ff9d', '#ff6f00', '#ff1744', '#e3f2fd'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    container.appendChild(confetti);
+                    
+                    // 移除彩带
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 50);
+            }
+        }
+        
+        // 创建星空粒子效果
+        function createStarParticles() {
+            const container = document.querySelector('.stars');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '3px';
+                particle.style.height = '3px';
+                particle.style.background = '#00e5ff';
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.boxShadow = '0 0 10px #00e5ff';
+                
+                container.appendChild(particle);
+                
+                // 粒子动画
+                anime({
+                    targets: particle,
+                    translateY: [0, -100],
+                    opacity: [1, 0],
+                    scale: [1, 0],
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'linear',
+                    complete: function() {
+                        particle.remove();
+                        createStarParticles();
+                    }
+                });
+            }
+        }
+        
+        // 页面操作函数
+        function restartGame() {
+            // 添加重新开始动画
+            anime({
+                targets: '.content-wrapper',
+                scale: [1, 0.8],
+                opacity: [1, 0],
+                duration: 500,
+                easing: 'easeInQuart',
+                complete: function() {
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+        
+        function shareAchievement() {
+            const shareText = `🎉 我刚完成了网络安全小蜜蜂游戏挑战！\n\n🏆 总分：${gameStats.totalScore.toLocaleString()}\n⏱️ 用时：${gameStats.totalTime}秒\n💀 击败漏洞怪物：${gameStats.enemiesDefeated}个\n\n一起来学习网络安全知识吧！`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '网络安全卫士胜利认证',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // 复制到剪贴板
+                navigator.clipboard.writeText(shareText + '\n' + window.location.href).then(() => {
+                    alert('成就信息已复制到剪贴板！');
+                });
+            }
+        }
+        
+        function downloadCertificate() {
+            // 创建证书内容
+            const certificate = `
+网络安全卫士任务证书
+
+兹证明：
+玩家已成功完成网络安全小蜜蜂游戏挑战
+
+成就统计：
+- 总分：${gameStats.totalScore.toLocaleString()}分
+- 总用时：${gameStats.totalTime}秒
+- 击败漏洞怪物：${gameStats.enemiesDefeated}个
+- 收集道具：${gameStats.powerUpsCollected}个
+
+掌握技能：
+✓ SQL注入漏洞识别与防御
+✓ XSS跨站脚本漏洞防护
+✓ 命令执行漏洞安全编码
+
+任务完成时间：${new Date().toLocaleString()}
+
+继续努力，成为网络安全专家！
+            `;
+            
+            // 创建下载链接
+            const blob = new Blob([certificate], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '网络安全卫士毕业证书.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 页面加载动画
+        function initPageAnimation() {
+            // 标题动画
+            anime({
+                targets: '.celebration-title',
+                scale: [0, 1],
+                opacity: [0, 1],
+                duration: 1000,
+                easing: 'easeOutElastic(1, .8)',
+                delay: 500
+            });
+            
+            // 副标题动画
+            anime({
+                targets: '.achievement-subtitle',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutQuart',
+                delay: 800
+            });
+            
+            // 内容卡片动画
+            anime({
+                targets: '.graduation-message, .stats-container, .qr-section, .learning-resources',
+                translateY: [30, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(200, {start: 1200}),
+                duration: 600,
+                easing: 'easeOutQuart'
+            });
+            
+            // 统计卡片动画
+            anime({
+                targets: '.stat-card',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                delay: anime.stagger(100, {start: 1500}),
+                duration: 500,
+                easing: 'easeOutBack'
+            });
+            
+            // 按钮动画
+            anime({
+                targets: '.cyber-button',
+                scale: [0, 1],
+                opacity: [0, 1],
+                delay: anime.stagger(150, {start: 2000}),
+                duration: 400,
+                easing: 'easeOutBack'
+            });
+        }
+        
+        // 初始化页面
+        window.addEventListener('load', function() {
+            updateStats();
+            initPageAnimation();
+            
+            // 启动庆祝效果
+            setTimeout(() => {
+                createFireworks();
+                createConfetti();
+                createStarParticles();
+            }, 1500);
+            
+            // 定期重复烟花效果
+            setInterval(createFireworks, 5000);
+            setInterval(createConfetti, 3000);
+        });
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'r':
+                case 'R':
+                    restartGame();
+                    break;
+                case 's':
+                case 'S':
+                    shareAchievement();
+                    break;
+                // case 'd':
+                // case 'D':
+                //     downloadCertificate();
+                    // break;
+            }
+        });
+    </script>
+</body>
+</html>

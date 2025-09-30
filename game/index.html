@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全小蜜蜂 - 外太空防御战</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 50%, #283593 100%);
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .space-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('resources/space_background.png') center/cover;
+            z-index: 1;
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: sparkle 3s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .game-canvas {
+            position: relative;
+            z-index: 10;
+            border: 2px solid #00e5ff;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            background: rgba(10, 14, 39, 0.8);
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hud-panel {
+            background: rgba(26, 35, 126, 0.8);
+            border: 1px solid #00e5ff;
+            border-radius: 8px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        
+        .health-bar {
+            width: 200px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff9d;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff9d, #00e5ff);
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            color: #00e5ff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+        }
+        
+        .level-display {
+            color: #00ff9d;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+        }
+        
+        .game-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(0, 229, 255, 0.8); }
+            to { text-shadow: 0 0 30px rgba(0, 229, 255, 1), 0 0 40px rgba(0, 229, 255, 0.8); }
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #e3f2fd;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .cyber-button {
+            background: linear-gradient(45deg, #1a237e, #283593);
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        
+        .cyber-button:hover {
+            background: linear-gradient(45deg, #283593, #3949ab);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .controls-info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e3f2fd;
+            text-align: center;
+            font-size: 14px;
+            z-index: 20;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+        }
+        
+        .victory-message {
+            font-size: 36px;
+            color: #00ff9d;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 255, 157, 0.8);
+        }
+        
+        .final-score {
+            font-size: 24px;
+            color: #00e5ff;
+            margin-bottom: 30px;
+        }
+        
+        .next-level-btn {
+            background: linear-gradient(45deg, #2e7d32, #4caf50);
+            border: 2px solid #00ff9d;
+            color: #00ff9d;
+        }
+        
+        .next-level-btn:hover {
+            background: linear-gradient(45deg, #388e3c, #66bb6a);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.6);
+        }
+        
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .network-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 10s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- 背景效果 -->
+        <div class="space-bg"></div>
+        <div class="stars"></div>
+        <div class="network-grid"></div>
+        <div class="particle-container" id="particles"></div>
+        
+        <!-- 游戏画布 -->
+        <canvas id="gameCanvas" class="game-canvas" width="800" height="600"></canvas>
+        
+        <!-- HUD界面 -->
+        <div class="hud">
+            <div class="hud-panel">
+                <div class="level-display orbitron">LEVEL <span id="currentLevel">1</span></div>
+                <div class="health-bar">
+                    <div class="health-fill" id="healthFill" style="width: 100%"></div>
+                </div>
+                <div style="color: #e3f2fd; font-size: 12px; margin-top: 5px;">生命值</div>
+            </div>
+            
+            <div class="hud-panel">
+                <div class="score-display orbitron">SCORE: <span id="score">0</span></div>
+                <div style="color: #e3f2fd; font-size: 12px; margin-top: 5px;">连击: <span id="combo">0</span>x</div>
+            </div>
+        </div>
+        
+        <!-- 开始界面 -->
+        <div class="start-screen" id="startScreen">
+            <h1 class="game-title orbitron">网络安全小蜜蜂</h1>
+            <p class="subtitle">外太空漏洞防御战</p>
+            <p style="color: #e3f2fd; margin-bottom: 30px; text-align: center; max-width: 600px;">
+                在这个充满危险的数字宇宙中，你将扮演网络安全卫士，<br>
+                抵御各种漏洞怪物的入侵，保卫网络空间的安全！
+            </p>
+            <button class="cyber-button orbitron" onclick="startGame()">开始游戏</button>
+            <button class="cyber-button orbitron" onclick="showTutorial()">游戏说明</button>
+            <button class="cyber-button orbitron" onclick="toggleSound()">音效: 开</button>
+        </div>
+        
+        <!-- 游戏结束界面 -->
+        <div class="game-over" id="gameOver">
+            <div class="victory-message orbitron" id="victoryMessage">关卡完成！</div>
+            <div class="final-score orbitron">最终得分: <span id="finalScore">0</span></div>
+            <button class="cyber-button next-level-btn orbitron" onclick="nextLevel()">下一关</button>
+            <button class="cyber-button orbitron" onclick="restartGame()">重新开始</button>
+            <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
+        </div>
+        
+        <!-- 控制说明 -->
+        <div class="controls-info">
+            <div>控制说明: 方向键/WASD 移动 | 空格键 射击 | P键 暂停 | ESC键 返回菜单</div>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+    
+    <script>
+        // 全局变量
+        let gameState = 'menu'; // menu, playing, paused, gameover
+        let currentLevel = 1;
+        let score = 0;
+        let health = 100;
+        let soundEnabled = true;
+        
+        // 初始化粒子效果
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                createParticle(container);
+            }
+        }
+        
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '2px';
+            particle.style.height = '2px';
+            particle.style.background = '#00e5ff';
+            particle.style.borderRadius = '50%';
+            particle.style.opacity = Math.random() * 0.8 + 0.2;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            
+            container.appendChild(particle);
+            
+            // 动画粒子
+            anime({
+                targets: particle,
+                translateY: [0, -100],
+                opacity: [particle.style.opacity, 0],
+                duration: Math.random() * 3000 + 2000,
+                easing: 'linear',
+                complete: function() {
+                    particle.remove();
+                    createParticle(container);
+                }
+            });
+        }
+        
+        // 开始游戏
+        function startGame() {
+            gameState = 'playing';
+            document.getElementById('startScreen').style.display = 'none';
+            initGame();
+        }
+        
+        // 显示游戏说明
+        function showTutorial() {
+            alert('游戏说明：\n\n1. 使用方向键或WASD控制飞船移动\n2. 按空格键发射激光消灭漏洞怪物\n3. 收集道具增强火力\n4. 避免被怪物撞击\n5. 每关通关后学习漏洞知识\n\n祝你好运，网络安全卫士！');
+        }
+        
+        // 切换音效
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            event.target.textContent = `音效: ${soundEnabled ? '开' : '关'}`;
+        }
+        
+        // 下一关
+        function nextLevel() {
+            currentLevel++;
+            if (currentLevel <= 3) {
+                document.getElementById('currentLevel').textContent = currentLevel;
+                document.getElementById('gameOver').style.display = 'none';
+                gameState = 'playing';
+                initLevel(currentLevel);
+            } else {
+                // 游戏通关，跳转到庆祝页面
+                window.location.href = 'celebration.html';
+            }
+        }
+        
+        // 重新开始
+        function restartGame() {
+            currentLevel = 1;
+            score = 0;
+            health = 100;
+            updateHUD();
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+            gameState = 'menu';
+        }
+        
+        // 返回主菜单
+        function backToMenu() {
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+            gameState = 'menu';
+        }
+        
+        // 更新HUD
+        function updateHUD() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('healthFill').style.width = health + '%';
+            document.getElementById('currentLevel').textContent = currentLevel;
+        }
+        
+        // 显示游戏结束
+        function showGameOver(victory) {
+            gameState = 'gameover';
+            document.getElementById('gameOver').style.display = 'flex';
+            document.getElementById('victoryMessage').textContent = victory ? '关卡完成！' : '游戏结束';
+            document.getElementById('finalScore').textContent = score;
+            
+            if (currentLevel >= 3) {
+                document.querySelector('.next-level-btn').style.display = 'none';
+            } else {
+                document.querySelector('.next-level-btn').style.display = 'block';
+            }
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', function(event) {
+            if (gameState === 'playing') {
+                handleKeyDown(event);
+            }
+        });
+        
+        document.addEventListener('keyup', function(event) {
+            if (gameState === 'playing') {
+                handleKeyUp(event);
+            }
+        });
+        
+        // 初始化
+        window.addEventListener('load', function() {
+            initParticles();
+            updateHUD();
+        });
+    </script>
+</body>
+</html>
