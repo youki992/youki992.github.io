@@ -1,1121 +1,513 @@
 <!DOCTYPE html>
-<html lang="en">
-
-
-<script LANGUAGE="javascript"> 
- 
-// function openwin1() { 
-// window.open ("img/1.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openwin2() { 
-// window.open ("img/2.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openwin3() { 
-// window.open ("img/3.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openwin4() { 
-// window.open ("img/4.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openwin5() { 
-// window.open ("img/5.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openwin6() { 
-// window.open ("img/6.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-
-// function openQR() { 
-// window.open ("img/QR.jpg", "newwindow", "height=600, width=440, top=150, left=600, hotkeys=no,toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openALI() { 
-// window.open ("img/ALI.png", "newwindow", "height=650, width=460, top=150, left=1000, hotkeys=no,toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-// function openLOGO() { 
-// window.open ("img/middle-logo.png", "newwindow", "height=400, width=300, top=300, left=300, toolbar=no,menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
-// } 
-document.addEventListener('DOMContentLoaded', function() {
-    var triangle = document.getElementById('corner-triangle');
-    triangle.addEventListener('click', function() {
-        window.location.href = 'https://mp.weixin.qq.com/s/sjRqGfVAODvRgNcNBr04CA'; // 替换为你想要跳转的URL
-    });
-});
-
-</script> 
-
-
-
-
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <title>C4安全团队</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
-
-  <meta property="og:title" content="">
-  <meta property="og:image" content="">
-  <meta property="og:url" content="">
-  <meta property="og:site_name" content="">
-  <meta property="og:description" content="">
-
-  <link href="favicon.ico" rel="shortcut icon">
-
-  <!--
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
-  -->
-  
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="lib/animate-css/animate.min.css" rel="stylesheet">
-
-  <link href="css/style.css" rel="stylesheet">
-<!--     <style>
-        /* 添加到 head 中的 style 标签内或外部样式表 */
-        #subscribe .qr-code {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全小蜜蜂 - 外太空防御战</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 50%, #283593 100%);
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
         }
-
-        /* 可选：如果需要调整二维码的位置 */
-/*         #footer .qr-code img {
-            margin-right: 180px;
-        } */
-    </style> -->
-<style>
-        .partner {
+        
+        .orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px; /* 图片之间的间距 */
-            padding: 20px;
         }
-        .partner a {
-            display: block;
-            margin: 10px;
+        
+        .space-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('resources/space_background.png') center/cover;
+            z-index: 1;
         }
-        .partner img {
-            max-width: 200px; /* 图片的最大宽度 */
-            height: auto; /* 保持原始宽高比 */
-            border: none;
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: sparkle 3s linear infinite;
         }
-        .partner-title {
-            text-align: center;
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .game-canvas {
+            position: relative;
+            z-index: 10;
+            border: 2px solid #00e5ff;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            background: rgba(10, 14, 39, 0.8);
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hud-panel {
+            background: rgba(26, 35, 126, 0.8);
+            border: 1px solid #00e5ff;
+            border-radius: 8px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        
+        .health-bar {
+            width: 200px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff9d;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff9d, #00e5ff);
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            color: #00e5ff;
             font-size: 24px;
-            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
         }
-	    .member-row:hover {
-      background-color: #e0e0e0;
-    }
-
-    .member-row:hover .member-avatar {
-      transform: scale(1.5);
-      transition: transform 0.3s ease;
-    }
-
-    .member-row {
-      text-align: left;
-      background-color: #f2f2f2;
-    }
-
-    .member-row td {
-      padding: 10px;
-    }
-
-    .member-avatar {
-      max-width: 50px;
-      height: auto;
-      transition: transform 0.3s ease;
-    }
-
-    .separator {
-      height: 1px;
-      background-color: #ddd;
-    }
-	.section-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .section-title-divider {
-      border-bottom: 2px solid #ccc;
-      margin-bottom: 20px;
-    }
-
-    .section-description {
-      font-size: 16px;
-      margin-bottom: 40px;
-    }
-
-    .about-title {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .about-text {
-      font-size: 16px;
-      line-height: 1.5;
-      margin-bottom: 10px;
-    }
-
-    .pic img {
-      max-width: 100%;
-      height: auto;
-      transition: transform 0.3s ease;
-    }
-
-    .pic img:hover {
-      transform: scale(1.1);
-    }
-
-    .pic {
-      text-align: center;
-      margin-top: 10px;
-    }
-	    /* 基本样式 */
-    #portfolio {
-      background: #F5F5F6;
-      padding: 80px 0;
-    }
-
-    .partner-title {
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .partners-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px; /* 伙伴之间的间距 */
-    }
-
-    .partner {
-      flex: 1;
-      max-width: 250px; /* 设置最大宽度，防止图片过大 */
-      text-align: center;
-    }
-
-    .partner img {
-      max-width: 100%;
-      height: auto;
-    }
-
-	/* 样式表 */
-#certificates {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.certificates-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.certificates-container {
-  display: flex;
-  flex-wrap: wrap; /* 允许换行 */
-  gap: 20px; /* 证书之间的间距 */
-  justify-content: center; /* 居中对齐 */
-}
-
-.certificate {
-  flex: 1 1 calc(33.333% - 40px); /* 每个证书占据大约1/3宽度，减去gap */
-  max-width: calc(33.333% - 40px);
-  min-width: 200px; /* 设置最小宽度，以便在小屏幕上不会过小 */
-  background-color: #f9f9f9;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* 使子元素能够相对于此元素定位 */
-  overflow: hidden; /* 确保内容不会溢出 */
-  transition: transform 0.2s ease-in-out;
-}
-
-.certificate:hover {
-  transform: scale(1.05); /* 鼠标悬停时稍微放大 */
-}
-
-.certificate img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* 新增的 overlay 样式 */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* 半透明背景色 */
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.certificate:hover .overlay {
-  opacity: 1;
-}
-
-.overlay .text {
-  font-size: 18px;
-  text-align: center;
-}
+        
+        .level-display {
+            color: #00ff9d;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+        }
+        
+        .game-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(0, 229, 255, 0.8); }
+            to { text-shadow: 0 0 30px rgba(0, 229, 255, 1), 0 0 40px rgba(0, 229, 255, 0.8); }
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #e3f2fd;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .cyber-button {
+            background: linear-gradient(45deg, #1a237e, #283593);
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        
+        .cyber-button:hover {
+            background: linear-gradient(45deg, #283593, #3949ab);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .controls-info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e3f2fd;
+            text-align: center;
+            font-size: 14px;
+            z-index: 20;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+        }
+        
+        .victory-message {
+            font-size: 36px;
+            color: #00ff9d;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 255, 157, 0.8);
+        }
+        
+        .final-score {
+            font-size: 24px;
+            color: #00e5ff;
+            margin-bottom: 30px;
+        }
+        
+        .next-level-btn {
+            background: linear-gradient(45deg, #2e7d32, #4caf50);
+            border: 2px solid #00ff9d;
+            color: #00ff9d;
+        }
+        
+        .next-level-btn:hover {
+            background: linear-gradient(45deg, #388e3c, #66bb6a);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.6);
+        }
+        
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .network-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 10s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
     </style>
 </head>
-
 <body>
-<div id="corner-triangle" style="width: 0; height: 0; border-top: 60px solid #FFC0CB; border-right: 60px solid transparent; position: fixed; top: 0; left: 0; z-index: 1000; cursor: pointer;">
-  <div style="position: absolute; top: -40px; left: 5px; color: white; font-size: 12px; transform: rotate(-45deg); transform-origin: center; white-space: nowrap; text-align: center; padding: 2px;">
-    合作
-  </div>
-</div>
-  <section id="hero">
-    <div class="hero-container">
-      <div class="wow fadeIn">
-        <div class="hero-logo">
-          <img class="" src="img/透明logo2.png" alt="Team Logo" width="200">
-        </div>
-
-        <h1>C4安全团队</h1>
-        <h2><span class="rotating"> 热衷于网络安全，致力于成为专业的SRC挖掘团队。</span></h2>
-        <!-- <strong><font size="1">2019/3/10</font></strong><br><br> -->
-        <div class="actions">
-          <a href="#about" class="btn-get-started">介绍</a>
-          <a href="#Dabout" class="btn-services">成员</a>
-          <a href="#portfolio" class="btn-services">成就</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  
-
-
-
-  <!--  导航栏      -->
-  
-  <header id="header">
-    <div class="container">
-
-      <div id="logo" class="pull-left">
-<!--         <a onclick="openLOGO()""><img src="img/middle.png" alt="Team logo" width="68"></a> -->
-      </div>
-
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">
-          <li class="menu-active"><a href="#hero"><font size="5"><b>HomePage</b></font></a></li>
-		  <li class="menu-has-children"><a href="#about"><font size="5"><b>Description</b></font></a>
-          </li>
-          <li><a href="#Dabout"><font size="5"><b>Members</b></font></a></li>
-          <li class="menu-has-children"><a href="#portfolio"><font size="5"><b>Achievements</b></font></a>
-          </li>
-		<li><a href="#partner"><font size="5"><b>Partner</b></font></a></li>
-		  <li><a href="#subscribe"><font size="5"><b>Contact</b></font></a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-
-
-
-
-  <!--  Description    -->
-  
-  <section id="about">
-    <div class="container wow fadeInUp">
-      <div class="row">
-        <div class="col-md-12" style="text-align: center;"> <!-- 文字居中对齐 -->
-          <h3 class="section-title">团队介绍</h3>
-          <div class="section-title-divider"></div>
+    <div class="game-container">
+        <!-- 背景效果 -->
+        <div class="space-bg"></div>
+        <div class="stars"></div>
+        <div class="network-grid"></div>
+        <div class="particle-container" id="particles"></div>
         
-          <p class="section-description">
-            <u><font size="4"><i>Description</i></font></u>
-          </p>
+        <!-- 游戏画布 -->
+        <canvas id="gameCanvas" class="game-canvas" width="800" height="600"></canvas>
         
-          <p class="about-text" style="text-align: center;"> <!-- 第一段文本 -->
-            我们是一群对网络安全充满热情的年轻探险者，Code4th安全团队（简称C4安全团队）正式成立于2024年7月。
-          </p>
-	  <p class="about-text" style="text-align: center;"> <!-- 第一段文本 -->
-            团队热衷于网络安全，致力于挖掘国内外SRC平台漏洞。
-          </p>
-          <p class="about-text" style="text-align: center;"> <!-- 第二段文本 -->
-            我们的座右铭是："成败在于细节"。梦想是成为专业的漏洞挖掘团队，共同探索网络安全的无限可能~
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-    </div>
-  </section>
-
-<section id="safe_attack" style="background-color: black; color: white;">
-  <div class="container">
-    <div class="page1-left">
-      <h5 class="left-title-en" style="color: red; font-size: 2.5em; font-family: 'Arial', sans-serif; font-weight: bold; text-shadow: 2px 2px 4px #000;">Code4th RED TEAM</h5>
-      <h1 class="left-title-cn" style="font-size: 3em; font-family: 'Arial', sans-serif; font-weight: bold;">C4安全团队提供专业安全测试</h1>
-      <p class="left-desc">团队拥有30+挖掘各大漏洞平台的网络安全师傅加盟，拥有各大漏洞特点挖掘经验和背景。</p>
-      <a class="btn left-btn" href="https://mp.weixin.qq.com/s/u0ZC8h4Kzk38WYuiz6DLMA" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none; border-radius: 50px; font-family: 'Arial', sans-serif; font-weight: bold;">开启您的安全测试之旅</a>
-          <br><br>
-      <a class="btn left-btn" href="xss/static-html/index.html" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #ff6b6b; color: white; text-align: center; text-decoration: none; border-radius: 50px; font-family: 'Arial', sans-serif; font-weight: bold;">C4安全-XSS漏洞练习平台</a>
-	          <br><br>
-      <a class="btn left-btn" href="game/index.html" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #6c7a89; color: white; text-align: center; text-decoration: none; border-radius: 50px; font-family: 'Arial', sans-serif; font-weight: bold;">C4安全-网安小蜜蜂战机</a>
-	</div>
-    <div class="page1-right">
-      <img src="./img/857e9e29-5ed6-4959-b036-a0497c6e77e0.png" class="page1-right-logo">
-    </div>
-  </div>
-</section>
-
-
-  <!--  Design   -->
-
-<section id="testimonials">
-    <div class="container wow fadeInUp">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="section-title">开发工具</h3>
-          <div class="section-title-divider"></div>
-          <p class="section-description"><u><font size="4"><i>Developed hack tools</i></font></u></p>
-
-          <h2 class="about-title"><font color="00000"><b>VscanPlus</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              Vscan综合扫描工具的二次开发版本，基于veo师傅的漏扫工具vscan二次开发的版本，端口扫描、指纹检测、目录fuzz、漏洞扫描功能工具，批量快速检测网站安全隐患。
-            </p>
-            <p><a href="https://github.com/youki992/VscanPlus" target="_blank">工具地址</a></p>
-		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;"><img src="https://img.shields.io/github/downloads/youki992/VscanPlus/total?color=blueviolet"> </div>
-            <p><div class="pic"><img src="img/QQ截图20240723145536.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-
-          <h2 class="about-title"><font color="00000"><b>Fofa-Cloud-Server</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              基于单FOFA账号部署的多人协作查询B/S模式，后端部署后通过前端网页交互查询数据和导出数据，前端由html开发，后端由spring-boot开发。根据不同情况可以部署在本地局域网中，或是部署在服务器上，使用Apache或Nginx进行配置前端页面。
-            </p>
-            <p><a href="https://github.com/youki992/Fofa-Cloud-Server" target="_blank">工具地址</a></p>
-		  		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;"><img src="https://img.shields.io/github/downloads/youki992/Fofa-Cloud-Server/total?color=blueviolet"> </div>
-            <p><div class="pic"><img src="img/QQ截图20240914101802.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-
-          <h2 class="about-title"><font color="00000"><b>Goby插件 - VscanPlus</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              Goby联动VscanPlus的插件，可对单个IP进行更加深度的漏洞、指纹、端口扫描检测。可在Goby官方插件商店中下载。
-            </p>
-            <p><a href="https://api.gobies.org/api/plugin-download/version_hash/5a966667f3b427b3a8d33c745c35fbe4" target="_blank">工具地址</a></p>
-            <p><div class="pic"><img src="/img/2dd46aa2-c808-478e-9efb-a7f90862f281.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-
-	  	<h2 class="about-title"><font color="00000"><b>代码审计辅助工具 - CodeStringSearcher</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              基于Java开发的代码审计工具，用于辅助快速代码审计，筛选危险方法名称搜索代码中可能存在的漏洞。config.properties配置文件中的searchText可以配置多个字符串关键字，并用英文逗号分割以方便搜索。
-            </p>
-            <p><a href="https://github.com/youki992/CodeStringSearcher" target="_blank">工具地址</a></p>
-		  		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;"><img src="https://img.shields.io/github/downloads/youki992/CodeStringSearcher/total?color=blueviolet"> </div>
-            <p><div class="pic"><img src="img/QQ20241212-132903.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-
-		<h2 class="about-title"><font color="00000"><b>用友NC漏洞检测工具 - YonYouNCPocTool</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              用友NC系列漏洞检测利用工具，支持批量检测（多POC、多目标）、展示对应漏洞POC（方便手工验证）、dnslog交互、结果导出、AI问答交互等。
-            </p>
-            <p><a href="https://github.com/youki992/YonYouNCPocTool" target="_blank">工具地址</a></p>
-		  		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;"><img src="https://img.shields.io/github/downloads/youki992/YonYouNCPocTool/total?color=blueviolet"> </div>
-            <p><div class="pic"><img src="img/QQ20250908-110039.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-
-		<h2 class="about-title"><font color="00000"><b>"闪紫"社工字典生成工具 - ShiningZ</b></font></h2>
-          <font size="4">
-            <p class="about-text" style="text-align: left;">
-              "闪紫"（英文名shiningZ）社工字典生成工具，支持ABC自定义排列组合、ABC列字典AI扩展、AI提示词联想字典、自定义AI提示、字典去重、结果导出等。
-            </p>
-            <p><a href="https://github.com/youki992/ShiningZ" target="_blank">工具地址</a></p>
-		  		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;"><img src="https://img.shields.io/github/downloads/youki992/ShiningZ/total?color=blueviolet"> </div>
-            <p><div class="pic"><img src="img/QQ20250908-110319.png" alt="" style="max-width: 450px; height: auto;"></div></p>
-          </font>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-
-  <!--  Demonstrate    -->
-  
-  <section id="Dabout">
-    <div class="container wow fadeInUp">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="section-title">团队核心成员</h3>
-          <div class="section-title-divider"></div>
-          <p class="section-description"><u><font size="4"><i>Members</i></font></u></p>
-        
-		<!-- <h2 class="about-title"><b>The introduction of CrpP</b></h2>
-			<font size="4">
-				<p class="about-text">
-					CrpP is a novel ciprofloxacin-modifying enzyme involved in the phosphorylation of ciprofloxacin and the protein is encoded by the Pseudomonas aeruginosa pUM505 plasmid which was discovered and named by Víctor M. Chávez-Jacobo et al. The research paper related to the newly discovered enzyme that degrades ciproxacin was published in May 2018 in the journal Antimicrobial Agents and Chemotherapy. The orf131 gene from Pseudomonas aeruginosa pUM505 plasmid which was renamed crpP encodes a novel protein capable of specifically conferring resistance to CIP in E. coli, the CrpP enzyme. It is involved in a new ciprofloxacin resistance mechanism.  According to research analysis,the resistance to CIP through an ATP-dependent mechanism involving phosphorylation of the antibiotic. CIP is first activated by binding to the ATP molecule, followed by being phosphorylated on the carboxyl group and degradation. In addition, the phosphorylated ciprofloxacin will degrade to 1, 4-dihydroquinoline which is speculated non-toxic through the retrieval of EPA database and it can be used as the synthetic raw material for a variety of drugs.
-				</p>
-				<p> 
-					The degradation pathway of phosphorylated CIP is as follows:
-				</p>
-		    </font>
-		
-		<div align="center"><img src="img/009.jpg" width=65%></img></div> -->
-		
-<article id="members" class="active">
-    <table style="margin: auto; width: 100%;">
-      <tbody>
-        <!-- 示例：第一个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/OIP-C.jpg" alt="Ex" src="img/OIP-C.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>chobits02</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">Code4th安全团队成立人，混迹于多个SRC平台，擅长Java后端开发</span>。
-              <br>个人博客：<a href="https://www.freebuf.com/author/chobits02" target="_blank">freebuf社区</a>、<a href="https://forum.butian.net/people/1420/articles" target="_blank">奇安信攻防社区</a>
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第二个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/7CF7CEF0B992A7F02C13783BE7DDACB2.png" alt="Ex" src="img/7CF7CEF0B992A7F02C13783BE7DDACB2.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>持剑</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">业余web漏洞挖掘手，学习路途上的新星，持续学习中</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第三个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/0D7070AA1BE86F993155AD2ACAAA5317.png" alt="Ex" src="img/0D7070AA1BE86F993155AD2ACAAA5317.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>零</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">web漏洞挖掘手，在校网络空间安全实验室混子</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第四个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/07351D22BCC5B88968CB6207BA8F8755.png" alt="Ex" src="img/07351D22BCC5B88968CB6207BA8F8755.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>桃花漫山</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">web漏洞挖掘，混迹于各大src，月排名进过前十，擅长web、app、小程序安全</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第五个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/AF4DD64B2EF43182C3797A0D59BA025CB.png" alt="Ex" src="img/AF4DD64B2EF43182C3797A0D59BA025CB.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>谦</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">在内网横向提权所向披靡，但在她心里举步维艰</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第六个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/EE4675D581E0E1D8E170088A22B5C0EA.png" alt="Ex" src="img/EE4675D581E0E1D8E170088A22B5C0EA.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>Dk625</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">校内网络攻防战队成员，常混迹于各信安比赛，CTF主要擅长方向为逆向</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第七个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/b_2dc13e980b4a93a17045111e13794b2c.png" alt="Ex" src="img/b_2dc13e980b4a93a17045111e13794b2c.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>ycdcy</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">CTF Web方向，擅长Web漏洞挖掘，参与过攻防演练和各类信安比赛</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第八个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/3299F402617573E6E8944542F9796E04.png" alt="Ex" src="img/3299F402617573E6E8944542F9796E04.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>潲水男孩</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">Web漏洞挖掘手，参与各类校内信安比赛并多次获得奖项</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第九个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/0E9C8251AE8F09BD49E73B08FB6A553C_副本.png" alt="Ex" src="img/0E9C8251AE8F09BD49E73B08FB6A553C_副本.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>likailehuihui</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">团队专业的CTFer，主攻方向为crypto/misc</span>。
-              <br>个人博客：<a href="https://www.cnblogs.com/huicry" target="_blank">cnblogs.com</a>
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-        <!-- 第十个成员的数据行 -->
-        <tr class="member-row">
-          <td>
-            <img data-original="img/ww12.png" alt="Ex" src="img/ww12.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>种树侠</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">Web漏洞方向，今天去种一棵，种一棵十年前没种的树</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-	      
-      <tr class="member-row">
-          <td>
-            <img data-original="img/17F04311B5E41DD9F0CCE587195F5807_副本.png" alt="Ex" src="img/17F04311B5E41DD9F0CCE587195F5807_副本.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>Octopus</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">擅长Web打点与内网渗透，CTF Web方向</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-
-    	<tr class="member-row">
-          <td>
-            <img data-original="img/b_532cb1c06ea79df739e2bf67426e744c_副本.png" alt="Ex" src="img/b_532cb1c06ea79df739e2bf67426e744c_副本.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>ttlp</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">SRC挖掘手，拥有年榜TOP排名和月榜排名若干，2024年阿里双十一保卫战军衔获得者，为多家大厂SRC报送过漏洞</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-
-    <tr class="member-row">
-          <td>
-            <img data-original="img/ed4a2866314a54ee84bc9e9e15ec3b4c_10_副本.png" alt="Ex" src="img/ed4a2866314a54ee84bc9e9e15ec3b4c_10_副本.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>gub1</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">擅长业务漏洞、越权漏洞挖掘，某src 24年年榜第一，总榜第三。123456，是你留给我最后的温柔~</span>。
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-
-    <tr class="member-row">
-          <td>
-            <img data-original="img/微信图片_20250925103845_4_313_副本.png" alt="Ex" src="img/微信图片_20250925103845_4_313_副本.png" class="member-avatar">
-          </td>
-          <td>
-            <p class="zh_CN">
-              <strong>Lopt</strong><br>
-              <span class="position" style="font-weight: bold; color: red;">擅长web漏洞挖掘，代码审计以及渗透测试工具的开发。</span>
-				              <br>个人主页：<a href="https://github.com/Loptsecurity" target="_blank">github.com</a>
-            </p>
-          </td>
-        </tr>
-        <tr class="separator">
-          <td colspan="2"></td>
-        </tr>
-		  
-      </tbody>
-    </table>
-  </article>
-		
-		</div>
-      </div>
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-    </div>
-  </section>
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <!--  Team形式 2  -->
-
-<section id="portfolio" style="background-color: black;">
-    <div class="container wow fadeInUp">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="section-title" style="color: white;">团队成就</h3>
-          <div class="section-title-divider"></div>
-          <p class="section-description"><font size="3"><b>Achievements</b></font></p>
-        </div>
-      </div>
-
-      <div class="col-lg-offset-2" >
-
-        <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ截图20240723135308.png);" onclick="openwin2()">
-            <div class="details">
-              <h4>途虎SRC</h4>
-              <span>2024年3月-个人月排行第2</span>
-            </div>
-          </a>
-        </div>
-
-        <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ截图20240723135435.png);"  onclick="openwin1()">
-            <div class="details">
-              <h4>漏洞银行</h4>
-              <span>2024年4月-团队月排行第3</span>
-            </div>
-          </a>
-        </div>
-
-        <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ截图20240723135435.png);"  ran'honclick="openwin1()">            <div class="details">
-              <h4>漏洞银行</h4>
-              <span>2024年7月-团队月排行第3</span>
-            </div>
-          </a>
-        </div>
-	  </div>
-		
-	  <div class="row" align="center">
-	  </div>
-		
-	<div class="col-lg-offset-2" >
-        <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ截图20240729165617_副本.png);" onclick="openwin5()">
-            <div class="details">
-              <h4>欧盟名人堂</h4>
-              <span>2024年7月-个人chobits02上榜</span>
-            </div>
-          </a>
-        </div>
-
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/{9D94597B-686E-E3DB-5E74-B06D7B282EA3}.jpg);" onclick="">
-            <div class="details">
-              <h4>掌控安全8月CTF挑战赛</h4>
-              <span>2024年8月-Code4th排名第8</span>
-            </div>
-          </a>
-        </div>
-
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/cert001.jpg);" onclick="">
-            <div class="details">
-              <h4>第四届长城杯网络安全大赛</h4>
-              <span>2024年9月-个人谦荣获"安全卫士"称号</span>
-            </div>
-          </a>
-        </div>
-			  </div>
-		
-	  <div class="row" align="center">
-	  </div>
-
-	<div class="col-lg-offset-2" >
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/cert002.jpg);" onclick="">
-            <div class="details">
-              <h4>第四届长城杯网络安全大赛</h4>
-              <span>2024年9月-个人likailehuihui荣获"安全卫士"称号</span>
-            </div>
-          </a>
-        </div>
-
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/cert003.jpg);" onclick="">
-            <div class="details">
-              <h4>第四届长城杯网络安全大赛</h4>
-              <span>2024年9月-个人ycdcy荣获"安全卫士"称号</span>
-            </div>
-          </a>
-        </div>
-
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ截图20241013225329.png);" onclick="">
-            <div class="details">
-              <h4>360漏洞云城市守护者计划</h4>
-              <span>2024年9月-个人桃花漫山排名第35</span>
-            </div>
-          </a>
-        </div>
-	  </div>
-
-  	<div class="row" align="center">
-	  </div>
-
-	<div class="col-lg-offset-2" >
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ20241127-141424.png);" onclick="">
-            <div class="details">
-              <h4>漏洞银行(通用漏洞互联网贡献榜)</h4>
-              <span>2024年11月-个人月排行第1</span>
-            </div>
-          </a>
-        </div>
-		<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ20250104-150148.png);" onclick="">
-            <div class="details">
-              <h4>漏洞银行团队年排行</h4>
-              <span>2024年-排行第7</span>
-            </div>
-          </a>
-        </div>
-
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/微信图片_20250110133045.png);" onclick="">
-            <div class="details">
-              <h4>喜马拉雅SRC</h4>
-              <span>2024年-个人ttlp年榜第1</span>
-            </div>
-          </a>
-        </div>
-
-<!--         <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/6.png);" onclick="openwin6()">
-            <div class="details">
-              <h4>QiuGu Meng</h4>
-              <span>CTO</span>
-            </div>
-          </a>
-        </div>
-
-        <div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/4.png);" onclick="openwin4()">
-            <div class="details">
-              <h4>YuChen Lee</h4>
-              <span>HTML Programmer</span>
-            </div>
-          </a>
-        </div>	 -->
-	  </div>
-
-	      	<div class="row" align="center">
-	  </div>
-
-	<div class="col-lg-offset-2" >
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ20250303-131900.png);" onclick="">
-            <div class="details">
-              <h4>漏洞银行团队月排行</h4>
-              <span>2025年2月-月排行第1</span>
-            </div>
-          </a>
-        </div>
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/B45717FBC555F4614F5CFE79CD6FBA9E_副本.jpg);" onclick="">
-            <div class="details">
-              <h4>春秋杯网络安全联赛</h4>
-              <span>2024年-个人ZDNWa2FXUnBhMlUlM2Q=荣获网络安全实战精英</span>
-            </div>
-          </a>
-        </div>
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/03BC8391A72E2218C2C8B8911732860B_副本.jpg);" onclick="">
-            <div class="details">
-              <h4>春秋杯网络安全联赛</h4>
-              <span>2024年-个人ZDNWa2FXUnBhMlUlM2Q=荣获Misc金手指</span>
-            </div>
-          </a>
-        </div>
-	  </div>
-
-  	<div class="row" align="center">
-	  </div>
-	    
-	<div class="col-lg-offset-2" >
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/BC014D871A1F373AB4713C90D6AFED47_副本.jpg);" onclick="">
-            <div class="details">
-              <h4>春秋杯网络安全联赛</h4>
-              <span>2024年-个人ZDNWa2FXUnBhMlUlM2Q=荣获Crypto金手指</span>
-            </div>
-          </a>
-        </div>
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ20250716-163713.png);" onclick="">
-            <div class="details">
-              <h4>漏洞银行团队月排行</h4>
-              <span>2025年3月-月排行第1</span>
-            </div>
-          </a>
-        </div>
-	<div class="col-md-3">
-          <a class="portfolio-item" style="background-image: url(img/QQ20250908-111307.png);" onclick="">
-            <div class="details">
-              <h4>漏洞银行团队月排行</h4>
-              <span>2025年8月-月排行第1</span>
-            </div>
-          </a>
-        </div>
-	  </div>
-
-	<div class="row" align="center">
-	  </div>
-	
-    </div>
-  </section>
-
-<!-- <section id="certificates">
-  <div class="certificates-title"><b>荣誉展示</b></div>
-  <div class="certificates-container"> -->
-    <!-- 每个 'certificate' div 代表一张证书 -->
-
-<!-- <div class="certificate">
-      <a target="_blank">
-        <img src="img/QQ20250122-092657.png" alt="Certificate 1">
-        <div class="overlay">
-          <div class="text">陕西国防工业学院漏洞报送证书</div>
-        </div>
-      </a>
-</div>
-<div class="certificate">
-      <a target="_blank">
-        <img src="img/1737508446136.jpg" alt="Certificate 1">
-        <div class="overlay">
-          <div class="text">浙江大学漏洞报送证书</div>
-        </div>
-      </a>
-</div>
-<div class="certificate">
-      <a target="_blank">
-        <img src="img/1737508868964.jpg" alt="Certificate 1">
-        <div class="overlay">
-          <div class="text">苏州高新区教育局漏洞报送证书</div>
-        </div>
-      </a>
-</div>
-  </div>
-
-  <div class="certificates-container">
-<div class="certificate">
-      <a target="_blank">
-        <img src="img/1737508898396.jpg" alt="Certificate 1">
-        <div class="overlay">
-          <div class="text">漏洞银行年度0 day潜力奖证书</div>
-        </div>
-      </a>
-</div> -->
-<!--     <div class="certificate">
-      <a target="_blank">
-        <img src="img/QQ20250122-092657.png" alt="Certificate 2">
-      </a>
-    </div>
-    <div class="certificate">
-      <a target="_blank">
-        <img src="img/1737508868964.jpg" alt="Certificate 3">
-      </a>
-    </div> -->
-    <!-- 继续添加更多证书... -->
-    <!-- 确保每一行有三个 'certificate' div -->
-<!--   </div>
-</section> -->
-
-
-  <section id="partner">
-    <div class="partner-title">合作伙伴</div>
-    <div class="partners-container">
-      <div class="partner">
-        <a href="https://wiki.freebuf.com/" target="_blank"><img src="img/freebuf_wiki.png" alt="FreeBuf Wiki"></a>
-      </div>
-      <div class="partner">
-        <a href="https://www.bugbank.cn/" target="_blank"><img src="img/bugbank.png" alt="漏洞银行"></a>
-      </div>
-  	<div class="partner">
-        <a href="https://www.yaklang.com/" target="_blank"><img src="img/logo-yakit.png" alt="Yak"></a>
-      </div>
-    </div>
-  </section>
-  
-  
-  
- 
-  
-  
-
-  
-  
-
-
-
-
-
-
-
-
-  <!--    Contact   -->
-  
-<section id="subscribe">
-  <div class="container wow fadeInUp">
-    <div class="row">
-      <div class="col-md-8">
-        <h3 class="subscribe-title">邮箱</h3>
-        <p class="subscribe-text">
-          <strong><font size="4"><span style="text-decoration: underline;">code4th@163.com</span></font></strong><br>
-          <span style="color: white;">团队长期纳新，欢迎投递简历至邮箱。</span>
-        </p>
-	      		  <br> 
-		  <br> 
-		  <br>
-	      		                <div class="qr-code">
-                    <img src="img/扫码_搜索联合传播样式-标准色版.png" alt="QR Code" width="400">
+        <!-- HUD界面 -->
+        <div class="hud">
+            <div class="hud-panel">
+                <div class="level-display orbitron">LEVEL <span id="currentLevel">1</span></div>
+                <div class="health-bar">
+                    <div class="health-fill" id="healthFill" style="width: 100%"></div>
                 </div>
-      </div>
-    </div>
-  </div>
-</section>
-  
-
-  
-  
-
-
-
-
-
-
-
-  <!--  页脚   -->
-
-  <footer id="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="copyright">
-            2025 <strong>Code4th安全团队<sup>&reg;</sup></strong> All Rights Reserved
-          </div>
-          <div class="credits">
-             <a href="https://beian.miit.gov.cn/" title="苏ICP备2024124178号-1" target="_blank">苏ICP备2024124178号-1</a>
-          </div>
-		  <br> 
-		  <br> 
-		  <br>
+                <div style="color: #e3f2fd; font-size: 12px; margin-top: 5px;">生命值</div>
+            </div>
+            
+            <div class="hud-panel">
+                <div class="score-display orbitron">SCORE: <span id="score">0</span></div>
+                <div style="color: #e3f2fd; font-size: 12px; margin-top: 5px;">连击: <span id="combo">0</span>x</div>
+                <div style="color: #00e5ff; font-size: 11px; margin-top: 3px;">过关目标: 3000分</div>
+            </div>
         </div>
-      </div>
+        
+        <!-- 开始界面 -->
+        <div class="start-screen" id="startScreen">
+            <h1 class="game-title orbitron">网络安全小蜜蜂</h1>
+            <p class="subtitle">外太空漏洞防御战</p>
+            <p style="color: #e3f2fd; margin-bottom: 30px; text-align: center; max-width: 600px;">
+                在这个充满危险的数字宇宙中，你将扮演网络安全卫士，<br>
+                抵御各种漏洞怪物的入侵，保卫网络空间的安全！
+            </p>
+            <button class="cyber-button orbitron" onclick="startGame()">开始游戏</button>
+            <button class="cyber-button orbitron" onclick="showTutorial()">游戏说明</button>
+            <button class="cyber-button orbitron" onclick="toggleSound()">音效: 开</button>
+        </div>
+        
+        <!-- 游戏结束界面 -->
+        <div class="game-over" id="gameOver">
+            <div class="victory-message orbitron" id="victoryMessage">关卡完成！</div>
+            <div class="final-score orbitron">最终得分: <span id="finalScore">0</span></div>
+            <button class="cyber-button orbitron" onclick="goToTutorial()">查看教程</button>
+            <button class="cyber-button next-level-btn orbitron" onclick="nextLevel()">下一关</button>
+            <button class="cyber-button orbitron" onclick="restartGame()">重新开始</button>
+            <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
+        </div>
+        
+        <!-- 暂停界面 -->
+        <div class="game-over" id="pauseScreen" style="display: none;">
+            <div class="victory-message orbitron">游戏暂停</div>
+            <div style="color: #e3f2fd; margin: 20px 0; text-align: center;">
+                当前得分: <span id="pauseScore" class="orbitron">0</span><br>
+                过关目标: <span class="orbitron" style="color: #00e5ff;">3000分</span>
+            </div>
+            <button class="cyber-button orbitron" onclick="resumeGame()">继续游戏</button>
+            <button class="cyber-button orbitron" onclick="restartCurrentLevel()">重新开始本关</button>
+            <button class="cyber-button orbitron" onclick="backToMenu()">返回主菜单</button>
+        </div>
+        
+        <!-- 控制说明 -->
+        <div class="controls-info">
+            <div>控制说明: 方向键/WASD 移动 | 空格键 射击 | P键 暂停 | ESC键 返回菜单</div>
+        </div>
     </div>
-  </footer>
-
-
-  <!--  Lib   -->
-  
-  <a href="#" class="back-to-top"><img src="img/未命名_副本.png" width="80"></img></a>
-  
-  
-
-
-  
-  
-  <script src="lib/jquery/jquery.min.js"></script>
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="lib/superfish/hoverIntent.js"></script>
-  <script src="lib/superfish/superfish.min.js"></script>
-  <script src="lib/morphext/morphext.min.js"></script>
-  <script src="lib/wow/wow.min.js"></script>
-  <script src="lib/stickyjs/sticky.js"></script>
-  <script src="lib/easing/easing.js"></script>
-
-
-  <script src="js/custom.js"></script>
-
-  <script src="contactform/contactform.js"></script>
-
-
+    
+    <script src="game.js"></script>
+    
+    <script>
+        // 全局变量
+        let gameState = 'menu'; // menu, playing, paused, gameover
+        let currentLevel = 1;
+        let score = 0;
+        let health = 100;
+        let soundEnabled = true;
+        
+        // 初始化粒子效果
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                createParticle(container);
+            }
+        }
+        
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '2px';
+            particle.style.height = '2px';
+            particle.style.background = '#00e5ff';
+            particle.style.borderRadius = '50%';
+            particle.style.opacity = Math.random() * 0.8 + 0.2;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            
+            container.appendChild(particle);
+            
+            // 动画粒子
+            anime({
+                targets: particle,
+                translateY: [0, -100],
+                opacity: [particle.style.opacity, 0],
+                duration: Math.random() * 3000 + 2000,
+                easing: 'linear',
+                complete: function() {
+                    particle.remove();
+                    createParticle(container);
+                }
+            });
+        }
+        
+        // 开始游戏
+        function startGame() {
+            gameState = 'playing';
+            document.getElementById('startScreen').style.display = 'none';
+            initGame();
+        }
+        
+        // 显示游戏说明
+        function showTutorial() {
+            alert('游戏说明：\n\n1. 使用方向键或WASD控制飞船移动\n2. 按空格键发射激光消灭漏洞怪物\n3. 收集道具增强火力\n4. 避免被怪物撞击\n5. 每关通关后学习漏洞知识\n\n祝你好运，网络安全卫士！');
+        }
+        
+        // 切换音效
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            event.target.textContent = `音效: ${soundEnabled ? '开' : '关'}`;
+        }
+        
+        // 继续游戏（从暂停状态）
+        function resumeGame() {
+            document.getElementById('pauseScreen').style.display = 'none';
+            gameState = 'playing'; // 确保游戏状态正确设置
+            lastTime = Date.now(); // 重置时间以避免跳跃
+            gameLoop = requestAnimationFrame(update); // 重新启动游戏循环
+        }
+        
+        // 重新开始当前关卡
+        function restartCurrentLevel() {
+            document.getElementById('pauseScreen').style.display = 'none';
+            score = 0;
+            health = 100;
+            updateHUD();
+            gameState = 'playing';
+            initLevel(currentLevel);
+        }
+        
+        // 下一关
+        /**
+         * 跳转到教程页面
+         * 根据当前关卡显示对应的教程内容
+         */
+        function goToTutorial() {
+            window.location.href = `tutorial.html?level=${currentLevel}`;
+        }
+        
+        function nextLevel() {
+            currentLevel++;
+            if (currentLevel <= 3) {
+                document.getElementById('currentLevel').textContent = currentLevel;
+                document.getElementById('gameOver').style.display = 'none';
+                gameState = 'playing';
+                initLevel(currentLevel);
+            } else {
+                // 游戏通关，跳转到庆祝页面
+                window.location.href = 'celebration.html';
+            }
+        }
+        
+        // 重新开始
+        function restartGame() {
+            currentLevel = 1;
+            score = 0;
+            health = 100;
+            updateHUD();
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+            gameState = 'menu';
+        }
+        
+        // 返回主菜单
+        function backToMenu() {
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+            gameState = 'menu';
+        }
+        
+        // 更新HUD
+        function updateHUD() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('healthFill').style.width = health + '%';
+            document.getElementById('currentLevel').textContent = currentLevel;
+        }
+        
+        /**
+         * 显示游戏结束界面
+         * @param {boolean} victory - 是否胜利
+         */
+        function showGameOver(victory) {
+            gameState = 'gameover';
+            document.getElementById('gameOver').style.display = 'flex';
+            
+            if (victory) {
+                document.getElementById('victoryMessage').textContent = '关卡完成！达到3000分！';
+            } else {
+                document.getElementById('victoryMessage').textContent = '游戏结束';
+            }
+            
+            document.getElementById('finalScore').textContent = score;
+            
+            // 根据当前关卡显示或隐藏下一关按钮
+            if (currentLevel >= 3) {
+                document.querySelector('.next-level-btn').style.display = 'none';
+            } else {
+                document.querySelector('.next-level-btn').style.display = 'block';
+            }
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', function(event) {
+            if (gameState === 'playing') {
+                handleKeyDown(event);
+                
+                // P键暂停游戏
+                if (event.key === 'p' || event.key === 'P') {
+                    document.getElementById('pauseScore').textContent = score;
+                    document.getElementById('pauseScreen').style.display = 'flex';
+                    togglePause();
+                }
+            }
+            
+            // ESC键返回主菜单
+            if (event.key === 'Escape') {
+                if (gameState === 'paused') {
+                    document.getElementById('pauseScreen').style.display = 'none';
+                }
+                backToMenu();
+            }
+        });
+        
+        document.addEventListener('keyup', function(event) {
+            if (gameState === 'playing') {
+                handleKeyUp(event);
+            }
+        });
+        
+        // 初始化
+        window.addEventListener('load', function() {
+            initParticles();
+            updateHUD();
+        });
+    </script>
 </body>
-
 </html>
