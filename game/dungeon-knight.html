@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全地牢骑士</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameCanvas {
+            border: 2px solid #00e5ff;
+            background: #0f0f23;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+        }
+
+        /* UI界面 */
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* 小地图 */
+        .minimap {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 180px;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00e5ff;
+            border-radius: 10px;
+            pointer-events: auto;
+        }
+
+        .minimap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100%;
+            height: 100%;
+            gap: 2px;
+            padding: 5px;
+        }
+
+        .minimap-room {
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .minimap-room.current {
+            background: #00e5ff;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+        }
+
+        .minimap-room.cleared {
+            background: #4caf50;
+        }
+
+        .minimap-room.unexplored {
+            background: #666;
+        }
+
+        /* 玩家状态栏 */
+        .player-stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00e5ff;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+        }
+
+        .stat-bar {
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 3px;
+        }
+
+        .stat-fill {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #ff6666);
+            transition: width 0.3s ease;
+        }
+
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4444ff, #6666ff);
+            transition: width 0.3s ease;
+        }
+
+        /* 武器信息 */
+        .weapon-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00e5ff;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 250px;
+        }
+
+        .weapon-name {
+            font-size: 16px;
+            color: #00e5ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .weapon-stats {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        /* 关卡信息 */
+        .level-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00e5ff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* 开始界面 */
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .game-title {
+            font-size: 48px;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .game-subtitle {
+            font-size: 18px;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        .start-button {
+            background: linear-gradient(45deg, #00e5ff, #0099cc);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+        }
+
+        /* 关卡完成界面 */
+        .level-complete {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .complete-title {
+            font-size: 36px;
+            color: #4caf50;
+            text-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .complete-stats {
+            color: #ccc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* 奖励页面 */
+        .reward-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .reward-title {
+            font-size: 48px;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            to { text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+
+        .reward-content {
+             text-align: center;
+             color: #ccc;
+             max-width: 600px;
+             line-height: 1.6;
+         }
+
+         /* 通用界面样式 */
+         .screen {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: rgba(0, 0, 0, 0.95);
+             display: none;
+             justify-content: center;
+             align-items: center;
+             z-index: 100;
+         }
+
+         .screen-content {
+             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+             border: 2px solid #00e5ff;
+             border-radius: 15px;
+             padding: 30px;
+             max-width: 800px;
+             max-height: 90vh;
+             overflow-y: auto;
+             box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+         }
+
+         .screen-content h1 {
+             color: #00e5ff;
+             text-align: center;
+             margin-bottom: 30px;
+             font-size: 32px;
+             text-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+         }
+
+         .instructions-content {
+             display: grid;
+             grid-template-columns: 1fr 1fr;
+             gap: 20px;
+             margin-bottom: 30px;
+         }
+
+         .instruction-section {
+             background: rgba(0, 0, 0, 0.3);
+             padding: 20px;
+             border-radius: 10px;
+             border: 1px solid #333;
+         }
+
+         .instruction-section h3 {
+             color: #00e5ff;
+             margin-bottom: 15px;
+             font-size: 18px;
+         }
+
+         .instruction-section p, .instruction-section li {
+             color: #ccc;
+             line-height: 1.6;
+             margin-bottom: 8px;
+         }
+
+         .controls-grid {
+             display: grid;
+             grid-template-columns: 1fr;
+             gap: 10px;
+         }
+
+         .control-item {
+             display: flex;
+             align-items: center;
+             gap: 15px;
+         }
+
+         .key {
+             background: #333;
+             color: #00e5ff;
+             padding: 5px 10px;
+             border-radius: 5px;
+             font-weight: bold;
+             min-width: 60px;
+             text-align: center;
+         }
+
+         .desc {
+             color: #ccc;
+         }
+
+         .highlight {
+             color: #ffd700;
+             font-weight: bold;
+         }
+
+         .enemy-types {
+             display: grid;
+             grid-template-columns: 1fr;
+             gap: 10px;
+         }
+
+         .enemy-type {
+             display: flex;
+             align-items: center;
+             gap: 15px;
+             padding: 10px;
+             background: rgba(0, 0, 0, 0.2);
+             border-radius: 8px;
+         }
+
+         .enemy-icon {
+             font-size: 24px;
+             width: 40px;
+             text-align: center;
+         }
+
+         .enemy-type strong {
+             color: #00e5ff;
+             display: block;
+             margin-bottom: 5px;
+         }
+
+         .enemy-type p {
+             margin: 0;
+             font-size: 12px;
+         }
+
+         .button-group {
+             display: flex;
+             justify-content: center;
+             gap: 20px;
+             margin-top: 20px;
+         }
+
+         .btn {
+             padding: 12px 25px;
+             border: none;
+             border-radius: 8px;
+             font-size: 16px;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             font-weight: bold;
+         }
+
+         .btn-primary {
+             background: linear-gradient(45deg, #00e5ff, #0099cc);
+             color: white;
+             box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+         }
+
+         .btn-primary:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+         }
+
+         .btn-secondary {
+             background: linear-gradient(45deg, #666, #888);
+             color: white;
+             box-shadow: 0 4px 15px rgba(102, 102, 102, 0.3);
+         }
+
+         .btn-secondary:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(102, 102, 102, 0.5);
+         }
+
+         .subtitle {
+             text-align: center;
+             color: #ccc;
+             margin-bottom: 30px;
+             font-size: 18px;
+         }
+     </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- 游戏画布 -->
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <!-- UI覆盖层 -->
+        <div class="ui-overlay">
+            <!-- 小地图 -->
+            <div class="minimap">
+                <div class="minimap-grid" id="minimapGrid">
+                    <!-- 9个房间格子将通过JavaScript生成 -->
+                </div>
+            </div>
+            
+            <!-- 玩家状态栏 -->
+            <div class="player-stats">
+                <div class="stat-bar">
+                    <div class="stat-label">生命值</div>
+                    <div class="stat-fill">
+                        <div class="health-fill" id="healthFill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-label">能量</div>
+                    <div class="stat-fill">
+                        <div class="energy-fill" id="energyFill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 武器信息 -->
+            <div class="weapon-info">
+                <div class="weapon-name" id="weaponName">激光剑</div>
+                <div class="weapon-stats" id="weaponStats">
+                    伤害: 25-35 | 射程: 150px | 攻速: 1.2/s
+                </div>
+            </div>
+            
+            <!-- 关卡信息 -->
+            <div class="level-info">
+                <div style="font-size: 14px; color: #ccc;">关卡</div>
+                <div style="font-size: 24px; color: #00e5ff;" id="currentLevel">1</div>
+                <div style="font-size: 12px; color: #ccc;" id="roomInfo">房间 1/9</div>
+            </div>
+        </div>
+        
+        <!-- 开始界面 -->
+        <div class="start-screen" id="startScreen">
+            <div class="game-title">网络安全地牢骑士</div>
+            <div class="game-subtitle">探索地牢，消灭网络威胁，保卫数字世界！</div>
+            <button class="start-button" onclick="startGame()">开始冒险</button>
+            <button class="start-button" onclick="showInstructions()" style="margin-top: 15px; background: #4a90e2;">游戏说明</button>
+        </div>
+        
+        <!-- 关卡完成界面 -->
+        <div class="level-complete" id="levelComplete">
+            <div class="complete-title">关卡完成！</div>
+            <div class="complete-stats" id="completeStats">
+                消灭怪物: 27<br>
+                用时: 3分42秒<br>
+                获得经验: 150
+            </div>
+            <button class="start-button" onclick="nextLevel()">进入下一关</button>
+            <button class="start-button" onclick="backToMenu()" style="margin-top: 10px; background: #666;">返回主菜单</button>
+        </div>
+        
+        <!-- 奖励页面 -->
+        <div class="reward-screen" id="rewardScreen">
+            <div class="reward-title">🎉 恭喜通关！ 🎉</div>
+            <div class="reward-content">
+                <h2 style="color: #00e5ff; margin-bottom: 20px;">网络安全卫士</h2>
+                <p>你成功清除了所有网络威胁，保卫了数字世界的安全！</p>
+                <p>在这次冒险中，你展现了出色的战斗技巧和策略思维。</p>
+                <br>
+                <p style="color: #ffd700;">🏆 获得成就：地牢征服者</p>
+                <p style="color: #4caf50;">💎 获得奖励：网络安全专家证书</p>
+                <br>
+                <button class="start-button" onclick="restartGame()" style="margin-top: 20px;">重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏说明界面 -->
+    <div id="instructionsScreen" class="screen">
+        <div class="screen-content">
+            <h1>🎮 游戏说明</h1>
+            <div class="instructions-content">
+                <div class="instruction-section">
+                    <h3>🎯 游戏目标</h3>
+                    <p>清除所有9个房间中的网络威胁，完成3个关卡的挑战！</p>
+                </div>
+                
+                <div class="instruction-section">
+                    <h3>🕹️ 操作控制</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">WASD</span>
+                            <span class="desc">移动角色</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">鼠标</span>
+                            <span class="desc">瞄准和攻击</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">空格</span>
+                            <span class="desc">冲刺（消耗能量）</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instruction-section">
+                    <h3>⚡ 能量系统</h3>
+                    <ul>
+                        <li>攻击消耗 <span class="highlight">20点能量</span></li>
+                        <li>冲刺消耗 <span class="highlight">20点能量</span></li>
+                        <li>能量会自动缓慢恢复</li>
+                        <li>合理管理能量是获胜关键</li>
+                    </ul>
+                </div>
+                
+                <div class="instruction-section">
+                    <h3>🦠 敌人类型</h3>
+                    <div class="enemy-types">
+                        <div class="enemy-type">
+                            <span class="enemy-icon virus">🦠</span>
+                            <div>
+                                <strong>病毒</strong>
+                                <p>带刺圆形，会主动攻击</p>
+                            </div>
+                        </div>
+                        <div class="enemy-type">
+                            <span class="enemy-icon trojan">🐴</span>
+                            <div>
+                                <strong>木马</strong>
+                                <p>方形伪装，隐藏恶意代码</p>
+                            </div>
+                        </div>
+                        <div class="enemy-type">
+                            <span class="enemy-icon worm">🐛</span>
+                            <div>
+                                <strong>蠕虫</strong>
+                                <p>椭圆形，快速移动</p>
+                            </div>
+                        </div>
+                        <div class="enemy-type">
+                            <span class="enemy-icon spyware">👁️</span>
+                            <div>
+                                <strong>间谍软件</strong>
+                                <p>菱形监视，扫描攻击</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instruction-section">
+                    <h3>🗺️ 地图系统</h3>
+                    <ul>
+                        <li>每关有9个房间需要清理</li>
+                        <li>从中心房间开始探索</li>
+                        <li>小地图显示房间状态</li>
+                        <li>注意墙壁障碍物的阻挡</li>
+                    </ul>
+                </div>
+                
+                <div class="instruction-section">
+                    <h3>🔫 武器系统</h3>
+                    <ul>
+                        <li>每关开始获得随机武器</li>
+                        <li>近战武器：激光剑、量子刀</li>
+                        <li>远程武器：等离子枪、电磁炮、病毒枪</li>
+                        <li>不同武器有不同伤害和射程</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="backToMenu()" class="btn btn-secondary">返回主菜单</button>
+                <button onclick="startGameFromInstructions()" class="btn btn-primary">开始游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="startScreen" class="screen">
+        <div class="screen-content">
+            <h1>🛡️ 网络安全地牢骑士</h1>
+            <p class="subtitle">清除网络威胁，保护数字世界！</p>
+            <div class="button-group">
+                <button onclick="startGame()" class="btn btn-primary">开始游戏</button>
+                <button onclick="showInstructions()" class="btn btn-secondary">游戏说明</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="level-complete" id="levelComplete">
+        <div class="complete-title">关卡完成！</div>
+        <div class="complete-stats" id="completeStats">
+            消灭怪物: 27<br>
+            用时: 3分42秒<br>
+            获得经验: 150
+        </div>
+        <button class="start-button" onclick="nextLevel()">进入下一关</button>
+        <button class="start-button" onclick="backToMenu()" style="margin-top: 10px; background: #666;">返回主菜单</button>
+    </div>
+    <div class="reward-screen" id="rewardScreen">
+        <div class="reward-title">🎉 恭喜通关！ 🎉</div>
+        <div class="reward-content">
+            <h2 style="color: #00e5ff; margin-bottom: 20px;">网络安全卫士</h2>
+            <p>你成功清除了所有网络威胁，保卫了数字世界的安全！</p>
+            <p>在这次冒险中，你展现了出色的战斗技巧和策略思维。</p>
+            <br>
+            <p style="color: #ffd700;">🏆 获得成就：地牢征服者</p>
+            <p style="color: #4caf50;">💎 获得奖励：网络安全专家证书</p>
+            <br>
+            <button class="start-button" onclick="restartGame()" style="margin-top: 20px;">重新开始</button>
+        </div>
+    </div>
+
+    <script src="dungeon-knight.js"></script>
+</body>
+</html>
