@@ -323,15 +323,8 @@
         </div>
     </div>
     
-    <script src="game.js"></script>
-    
     <script>
-        // 全局变量
-        let gameState = 'menu'; // menu, playing, paused, gameover
-        let currentLevel = 1;
-        let score = 0;
-        let health = 100;
-        let soundEnabled = true;
+        // 全局变量将在game.js中声明，这里只需要声明页面特有的变量
         
         // 初始化粒子效果
         function initParticles() {
@@ -370,9 +363,16 @@
         
         // 开始游戏
         function startGame() {
-            gameState = 'playing';
-            document.getElementById('startScreen').style.display = 'none';
-            initGame();
+            // 等待game.js加载完成后再调用initGame
+            if (typeof initGame === 'function') {
+                gameState = 'playing';
+                currentLevel = 1; // 确保从第一关开始
+                document.getElementById('startScreen').style.display = 'none';
+                initGame();
+            } else {
+                // 如果initGame还未定义，稍后重试
+                setTimeout(startGame, 100);
+            }
         }
         
         // 显示游戏说明
@@ -419,6 +419,11 @@
                 document.getElementById('currentLevel').textContent = currentLevel;
                 document.getElementById('gameOver').style.display = 'none';
                 gameState = 'playing';
+                // 重置分数和生命值为下一关
+                score = 0;
+                health = 100;
+                updateHUD();
+                // 直接初始化关卡，不调用initGame避免重复重置
                 initLevel(currentLevel);
             } else {
                 // 游戏通关，跳转到庆祝页面
@@ -446,9 +451,16 @@
         
         // 更新HUD
         function updateHUD() {
-            document.getElementById('score').textContent = score;
-            document.getElementById('healthFill').style.width = health + '%';
-            document.getElementById('currentLevel').textContent = currentLevel;
+            // 检查变量是否已定义
+            if (typeof score !== 'undefined') {
+                document.getElementById('score').textContent = score;
+            }
+            if (typeof player !== 'undefined' && player.health !== undefined) {
+                document.getElementById('healthFill').style.width = player.health + '%';
+            }
+            if (typeof currentLevel !== 'undefined') {
+                document.getElementById('currentLevel').textContent = currentLevel;
+            }
         }
         
         /**
@@ -461,18 +473,15 @@
             
             if (victory) {
                 document.getElementById('victoryMessage').textContent = '关卡完成！达到3000分！';
+                // 胜利时显示下一关按钮
+                document.querySelector('.next-level-btn').style.display = 'block';
             } else {
-                document.getElementById('victoryMessage').textContent = '游戏结束';
+                document.getElementById('victoryMessage').textContent = '游戏结束！生命值耗尽';
+                // 失败时隐藏下一关按钮
+                document.querySelector('.next-level-btn').style.display = 'none';
             }
             
             document.getElementById('finalScore').textContent = score;
-            
-            // 根据当前关卡显示或隐藏下一关按钮
-            if (currentLevel >= 3) {
-                document.querySelector('.next-level-btn').style.display = 'none';
-            } else {
-                document.querySelector('.next-level-btn').style.display = 'block';
-            }
         }
         
         // 键盘控制
@@ -509,5 +518,7 @@
             updateHUD();
         });
     </script>
+    
+    <script src="game.js"></script>
 </body>
 </html>
