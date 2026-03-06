@@ -29,18 +29,28 @@
     }).join('');
   }
 
+  function normalizeText(v) {
+    return String(v || '')
+      .toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[\-_.，。、《》：:；;（）()【】\[\]"'“”‘’]/g, '');
+  }
+
   function doSearch(keyword) {
     var all = window.C4_ARTICLES || [];
-    var q = (keyword || '').trim().toLowerCase();
+    var raw = (keyword || '').trim();
+    var q = normalizeText(raw);
+
     if (!q) {
       renderList(all);
       return;
     }
 
     var result = all.filter(function (a) {
-      var text = [a.title, a.summary, (a.tags || []).join(' ')].join(' ').toLowerCase();
+      var text = normalizeText([a.title, a.summary, (a.tags || []).join(' ')].join(' '));
       return text.indexOf(q) > -1;
     });
+
     renderList(result);
   }
 
