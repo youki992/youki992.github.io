@@ -21,9 +21,12 @@
         return '<span class="article-tag">' + esc(tag) + '</span>';
       }).join('');
 
-      return '<a class="article-card" target="_blank" href="' + esc(a.url) + '">' +
+      var source = esc(a.source || '公众号：C4安全');
+      var date = esc(a.date || '日期待补充');
+      return '<a class="article-card" href="' + esc(a.url) + '">' +
         '<h4>' + esc(a.title) + '</h4>' +
         '<p>' + esc(a.summary || '') + '</p>' +
+        '<div class="article-meta">' + source + ' · ' + date + '</div>' +
         '<div class="article-tags">' + tags + '</div>' +
         '</a>';
     }).join('');
@@ -56,6 +59,7 @@
 
   function bindThemeToggle() {
     var btn = document.getElementById('themeToggleBtn');
+    var icon = document.getElementById('themeIcon');
     if (!btn) return;
     var root = document.documentElement;
     var current = localStorage.getItem('c4_theme') || 'dark';
@@ -63,10 +67,10 @@
     function apply(theme) {
       if (theme === 'light') {
         root.classList.add('theme-light');
-        btn.textContent = '☀️';
+        if (icon) icon.className = 'fa fa-sun-o';
       } else {
         root.classList.remove('theme-light');
-        btn.textContent = '🌙';
+        if (icon) icon.className = 'fa fa-moon-o';
       }
       localStorage.setItem('c4_theme', theme);
     }

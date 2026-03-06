@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>C4安全 - 文章详情</title>
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="css/style.css?v=20260306-0242" rel="stylesheet" />
+  <style>
+    .article-page-wrap { max-width: 980px; margin: 110px auto 40px; padding: 0 14px; }
+    .article-box { background: rgba(15,23,42,.68); border: 1px solid rgba(71,85,105,.55); border-radius: 14px; padding: 22px; }
+    .article-box h1 { margin-top: 0; color: #f8fbff; font-size: 30px; line-height: 1.35; }
+    .article-sub { color: #9fb2d6; margin: 12px 0 18px; }
+    .article-body { color: #dbe7ff; line-height: 1.8; font-size: 16px; }
+    .article-back { margin-bottom: 14px; display: inline-block; }
+    .theme-light .article-box { background: #fff; border-color: #dbe2f2; }
+    .theme-light .article-box h1 { color: #0f172a; }
+    .theme-light .article-sub { color: #475569; }
+    .theme-light .article-body { color: #1e293b; }
+  </style>
+</head>
+<body>
+<header id="header">
+  <div class="container">
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li><a href="index.html#hero"><b>返回首页</b></a></li>
+        <li class="nav-tool"><a href="#" id="themeToggleBtn" title="切换黑夜/白天"><i id="themeIcon" class="fa fa-moon-o"></i></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="article-page-wrap">
+  <a class="article-back" href="index.html#article-search-results"><i class="fa fa-angle-left"></i> 返回文章列表</a>
+  <div class="article-box">
+    <h1 id="articleTitle">文章加载中...</h1>
+    <div class="article-sub" id="articleMeta">公众号：C4安全 · 日期待补充</div>
+    <div class="article-body" id="articleBody">
+      正文内容正在整理中。当前先完成站内文章页跳转和检索，后续可批量导入完整正文。
+    </div>
+  </div>
+</div>
+
+<script src="js/articles-data.js?v=20260306-0242"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var id = Number(params.get('id') || 0);
+  var list = window.C4_ARTICLES || [];
+  var article = list.find(function (x) { return Number(x.id) === id; }) || null;
+
+  if (article) {
+    document.title = article.title + ' - C4安全';
+    document.getElementById('articleTitle').textContent = article.title;
+    document.getElementById('articleMeta').textContent = (article.source || '公众号：C4安全') + ' · ' + (article.date || '日期待补充');
+    document.getElementById('articleBody').textContent = (article.summary || '正文内容正在整理中。');
+  } else {
+    document.getElementById('articleTitle').textContent = '未找到文章';
+    document.getElementById('articleBody').textContent = '文章不存在或编号错误。';
+  }
+
+  var btn = document.getElementById('themeToggleBtn');
+  var icon = document.getElementById('themeIcon');
+  var root = document.documentElement;
+  var current = localStorage.getItem('c4_theme') || 'dark';
+  function apply(theme) {
+    if (theme === 'light') {
+      root.classList.add('theme-light');
+      icon.className = 'fa fa-sun-o';
+    } else {
+      root.classList.remove('theme-light');
+      icon.className = 'fa fa-moon-o';
+    }
+    localStorage.setItem('c4_theme', theme);
+  }
+  apply(current);
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    apply(root.classList.contains('theme-light') ? 'dark' : 'light');
+  });
+})();
+</script>
+</body>
+</html>

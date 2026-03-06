@@ -1733,3 +1733,13 @@ font[color="#000000"] {
   background: #ffffff;
   border: 1px solid #dbe2f2;
 }
+
+.article-meta {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.theme-light .article-meta {
+  color: #64748b;
+}
