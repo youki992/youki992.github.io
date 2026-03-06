@@ -8,14 +8,26 @@
       .replace(/'/g, '&#39;');
   }
 
+  function normalizeCoverUrl(url) {
+    var raw = String(url || '').trim();
+    if (!raw) return '';
+
+    if (/mmbiz\.qpic\.cn/i.test(raw)) {
+      var noProto = raw.replace(/^https?:\/\//i, '');
+      return 'https://images.weserv.nl/?url=' + encodeURIComponent(noProto);
+    }
+
+    return raw;
+  }
+
   function getCoverUrl(article) {
     var content = String((article && article.content) || '');
 
     var coverMatch = content.match(/!\[\s*cover_image\s*\]\(([^)]+)\)/i);
-    if (coverMatch && coverMatch[1]) return coverMatch[1].trim();
+    if (coverMatch && coverMatch[1]) return normalizeCoverUrl(coverMatch[1]);
 
     var firstImageMatch = content.match(/!\[[^\]]*\]\(([^)]+)\)/);
-    if (firstImageMatch && firstImageMatch[1]) return firstImageMatch[1].trim();
+    if (firstImageMatch && firstImageMatch[1]) return normalizeCoverUrl(firstImageMatch[1]);
 
     return '';
   }
