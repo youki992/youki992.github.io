@@ -96,7 +96,7 @@
       });
     }
 
-    tags.forEach(function (tagEl) {
+    Array.prototype.forEach.call(tags, function (tagEl) {
       tagEl.addEventListener('click', function () {
         var t = tagEl.getAttribute('data-tag') || '';
         if (input) input.value = t;

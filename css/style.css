@@ -1641,3 +1641,95 @@ font[color="#000000"] {
 #hero .hero-stats {
   margin-bottom: 14px;
 }
+
+/* ===== 2026-03 force-fix: cards + theme toggle visibility ===== */
+#quick-links .hero-go-card {
+  display: block;
+  min-height: 132px;
+}
+
+#quick-links .hero-go-card .go-title,
+#quick-links .hero-go-card .go-desc {
+  display: block;
+}
+
+.article-results-list {
+  margin-top: 12px;
+}
+
+.article-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.article-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(135deg, #22d3ee, #8b5cf6);
+}
+
+.article-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, .28);
+  border-color: rgba(56, 189, 248, .6);
+}
+
+/* global light mode overrides */
+.theme-light body,
+.theme-light #about,
+.theme-light #testimonials,
+.theme-light #Dabout,
+.theme-light #portfolio,
+.theme-light #partner,
+.theme-light #subscribe,
+.theme-light #safe_attack,
+.theme-light .section-results {
+  background: #eef3fb !important;
+  color: #1e293b !important;
+}
+
+.theme-light #header,
+.theme-light .is-sticky #header {
+  background: rgba(255,255,255,.93) !important;
+  border-bottom: 1px solid #dbe2f2;
+}
+
+.theme-light .nav-menu a,
+.theme-light .section-title,
+.theme-light .about-title,
+.theme-light .partner-title,
+.theme-light .subscribe-title {
+  color: #0f172a !important;
+}
+
+.theme-light .section-description,
+.theme-light .about-text,
+.theme-light p,
+.theme-light .left-desc,
+.theme-light .go-desc {
+  color: #334155 !important;
+}
+
+.theme-light .member-row {
+  background: #ffffff !important;
+}
+
+.theme-light #quick-links .hero-go-card {
+  border-color: rgba(15,23,42,.1);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, .12);
+}
+
+.theme-light .hero-search-box {
+  background: #ffffff;
+  border: 1px solid #dbe2f2;
+}
+
+.theme-light .search-tag {
+  background: #ffffff;
+  border: 1px solid #dbe2f2;
+}
