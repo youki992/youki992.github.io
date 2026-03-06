@@ -6,7 +6,7 @@
   <title>C4安全 - 文章详情</title>
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="css/style.css?v=20260306-0300" rel="stylesheet" />
+  <link href="css/style.css?v=20260306-0305" rel="stylesheet" />
   <style>
     .article-page-wrap { max-width: 980px; margin: 110px auto 40px; padding: 0 14px; }
     .article-box { background: rgba(15,23,42,.68); border: 1px solid rgba(71,85,105,.55); border-radius: 14px; padding: 22px; }
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<script src="js/articles-data.js?v=20260306-0300"></script>
+<script src="js/articles-data.js?v=20260306-0305"></script>
 <script>
 (function () {
   var params = new URLSearchParams(location.search);
@@ -51,13 +51,26 @@
   var list = window.C4_ARTICLES || [];
   var article = list.find(function (x) { return Number(x.id) === id; }) || null;
 
+  function rewriteImageUrl(url) {
+    var src = String(url || '').trim();
+    var noQuote = src.replace(/^['\"]|['\"]$/g, '');
+    if (!/^https?:\/\//i.test(noQuote)) return noQuote;
+    var wxHost = /https?:\/\/([^/]*\.)?(mmbiz\.qpic\.cn|qpic\.cn|qq\.com|weixin\.qq\.com)\//i.test(noQuote);
+    if (!wxHost) return noQuote;
+    var cleaned = noQuote.replace(/^https?:\/\//i, '');
+    return 'https://images.weserv.nl/?url=' + encodeURIComponent(cleaned) + '&n=-1';
+  }
+
   function mdToHtml(md) {
     var text = String(md || '');
     text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     text = text.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
     text = text.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
     text = text.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
-    text = text.replace(/!\[[^\]]*\]\(([^)]+)\)/g, '<img src="$1" style="max-width:100%;height:auto;border-radius:10px;margin:10px 0;"/>');
+    text = text.replace(/!\[[^\]]*\]\(([^)]+)\)/g, function (_, rawUrl) {
+      var finalUrl = rewriteImageUrl(rawUrl);
+      return '<img src="' + finalUrl + '" referrerpolicy="no-referrer" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:10px;margin:10px 0;"/>';
+    });
     text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
