@@ -6,7 +6,7 @@
   <title>C4安全 - 文章详情</title>
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="css/style.css?v=20260306-0242" rel="stylesheet" />
+  <link href="css/style.css?v=20260306-0248" rel="stylesheet" />
   <style>
     .article-page-wrap { max-width: 980px; margin: 110px auto 40px; padding: 0 14px; }
     .article-box { background: rgba(15,23,42,.68); border: 1px solid rgba(71,85,105,.55); border-radius: 14px; padding: 22px; }
@@ -38,12 +38,12 @@
     <h1 id="articleTitle">文章加载中...</h1>
     <div class="article-sub" id="articleMeta">公众号：C4安全 · 日期待补充</div>
     <div class="article-body" id="articleBody">
-      正文内容正在整理中。当前先完成站内文章页跳转和检索，后续可批量导入完整正文。
+      正文加载中...
     </div>
   </div>
 </div>
 
-<script src="js/articles-data.js?v=20260306-0242"></script>
+<script src="js/articles-data.js?v=20260306-0248"></script>
 <script>
 (function () {
   var params = new URLSearchParams(location.search);
@@ -51,11 +51,38 @@
   var list = window.C4_ARTICLES || [];
   var article = list.find(function (x) { return Number(x.id) === id; }) || null;
 
+  function mdToHtml(md) {
+    var text = String(md || '');
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    text = text.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+    text = text.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+    text = text.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+    text = text.replace(/!\[[^\]]*\]\(([^)]+)\)/g, '<img src="$1" style="max-width:100%;height:auto;border-radius:10px;margin:10px 0;"/>');
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    text = text.replace(/\n\n+/g, '</p><p>');
+    text = '<p>' + text + '</p>';
+    return text;
+  }
+
   if (article) {
     document.title = article.title + ' - C4安全';
     document.getElementById('articleTitle').textContent = article.title;
     document.getElementById('articleMeta').textContent = (article.source || '公众号：C4安全') + ' · ' + (article.date || '日期待补充');
-    document.getElementById('articleBody').textContent = (article.summary || '正文内容正在整理中。');
+
+    if (article.mdPath) {
+      fetch(article.mdPath)
+        .then(function (r) { return r.text(); })
+        .then(function (md) {
+          document.getElementById('articleBody').innerHTML = mdToHtml(md);
+        })
+        .catch(function () {
+          document.getElementById('articleBody').textContent = (article.summary || '正文加载失败。');
+        });
+    } else {
+      document.getElementById('articleBody').textContent = (article.summary || '正文内容正在整理中。');
+    }
   } else {
     document.getElementById('articleTitle').textContent = '未找到文章';
     document.getElementById('articleBody').textContent = '文章不存在或编号错误。';
