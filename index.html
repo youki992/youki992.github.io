@@ -279,28 +279,50 @@ text-align: center;
 </div>
 </div>
 <section id="hero">
-<div class="hero-container">
-<div class="wow fadeIn">
-<div class="hero-logo">
-<img class="" src="img/透明logo2.png" alt="Team Logo" width="200">
-</div>
+  <div id="heroCarousel" class="carousel slide" data-ride="carousel" data-interval="4200">
+    <ol class="carousel-indicators">
+      <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#heroCarousel" data-slide-to="1"></li>
+      <li data-target="#heroCarousel" data-slide-to="2"></li>
+    </ol>
 
-<div class="hero-badge">Code4th Security Team</div>
-<h1>C4安全团队</h1>
-<h2><span class="rotating"> 热衷于网络安全，致力于成为专业的SRC挖掘团队。</span></h2>
-<div class="hero-subline">专注漏洞挖掘 · 安全研究 · 红队攻防</div>
-<div class="hero-stats">
-  <div class="hero-stat"><b>30+</b><span>核心与合作成员</span></div>
-  <div class="hero-stat"><b>多个</b><span>SRC平台持续输出</span></div>
-  <div class="hero-stat"><b>长期</b><span>工具研发与实战分享</span></div>
-</div>
-<div class="actions">
-<a href="#about" class="btn-get-started">介绍</a>
-<a href="#Dabout" class="btn-services">成员</a>
-<a href="#portfolio" class="btn-services">成就</a>
-</div>
-</div>
-</div>
+    <div class="carousel-inner" role="listbox">
+      <div class="item active hero-slide" style="background-image:url('img/hero-bg.jpg');"></div>
+      <div class="item hero-slide" style="background-image:url('img/hero-bg1.jpg');"></div>
+      <div class="item hero-slide" style="background-image:url('img/main-bg.png');"></div>
+    </div>
+
+    <a class="left carousel-control" href="#heroCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#heroCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+  <div class="hero-container">
+    <div class="wow fadeIn">
+      <div class="hero-logo">
+        <img class="" src="img/透明logo2.png" alt="Team Logo" width="200">
+      </div>
+      <div class="hero-badge">Code4th Security Team</div>
+      <h1>C4安全团队</h1>
+      <h2><span class="rotating"> 热衷于网络安全，致力于成为专业的SRC挖掘团队。</span></h2>
+      <div class="hero-subline">专注漏洞挖掘 · 安全研究 · 红队攻防</div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>30+</b><span>核心与合作成员</span></div>
+        <div class="hero-stat"><b>多个</b><span>SRC平台持续输出</span></div>
+        <div class="hero-stat"><b>长期</b><span>工具研发与实战分享</span></div>
+      </div>
+      <div class="actions">
+        <a href="#about" class="btn-get-started">了解团队</a>
+        <a href="#testimonials" class="btn-services">开发工具</a>
+        <a href="#safe_attack" class="btn-services">靶场专区</a>
+      </div>
+    </div>
+  </div>
 </section>
 
 
@@ -318,14 +340,44 @@ text-align: center;
 
 <nav id="nav-menu-container">
 <ul class="nav-menu">
-<li class="menu-active"><a href="#hero"><font size="5"><b>HomePage</b></font></a></li>
-<li class="menu-has-children"><a href="#about"><font size="5"><b>Description</b></font></a>
+<li class="menu-active"><a href="#hero"><b>首页</b></a></li>
+
+<li class="menu-has-children">
+  <a href="#about"><b>团队</b></a>
+  <ul>
+    <li><a href="#about">团队介绍</a></li>
+    <li><a href="#Dabout">核心成员</a></li>
+  </ul>
 </li>
-<li><a href="#Dabout"><font size="5"><b>Members</b></font></a></li>
-<li class="menu-has-children"><a href="#portfolio"><font size="5"><b>Achievements</b></font></a>
+
+<li class="menu-has-children">
+  <a href="#testimonials"><b>工具</b></a>
+  <ul>
+    <li><a href="#testimonials">开发工具</a></li>
+    <li><a href="https://github.com/youki992/VscanPlus" target="_blank">VscanPlus</a></li>
+    <li><a href="https://github.com/youki992/Fofa-Cloud-Server" target="_blank">Fofa-Cloud-Server</a></li>
+  </ul>
 </li>
-<li><a href="#partner"><font size="5"><b>Partner</b></font></a></li>
-<li><a href="#subscribe"><font size="5"><b>Contact</b></font></a></li>
+
+<li class="menu-has-children">
+  <a href="#safe_attack"><b>靶场</b></a>
+  <ul>
+    <li><a href="#safe_attack">靶场总览</a></li>
+    <li><a href="xss/static-html/index.html" target="_blank">XSS漏洞练习平台</a></li>
+    <li><a href="game/index.html" target="_blank">网安小蜜蜂战机</a></li>
+    <li><a href="game/dungeon-knight.html" target="_blank">网安地牢骑士</a></li>
+  </ul>
+</li>
+
+<li class="menu-has-children">
+  <a href="#portfolio"><b>成果</b></a>
+  <ul>
+    <li><a href="#portfolio">团队成就</a></li>
+    <li><a href="#partner">合作伙伴</a></li>
+  </ul>
+</li>
+
+<li><a href="#subscribe"><b>联系</b></a></li>
 </ul>
 </nav>
 </div>
