@@ -6,7 +6,7 @@
   <title>C4安全 - 文章详情</title>
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="css/style.css?v=20260306-0248" rel="stylesheet" />
+  <link href="css/style.css?v=20260306-0253" rel="stylesheet" />
   <style>
     .article-page-wrap { max-width: 980px; margin: 110px auto 40px; padding: 0 14px; }
     .article-box { background: rgba(15,23,42,.68); border: 1px solid rgba(71,85,105,.55); border-radius: 14px; padding: 22px; }
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<script src="js/articles-data.js?v=20260306-0248"></script>
+<script src="js/articles-data.js?v=20260306-0253"></script>
 <script>
 (function () {
   var params = new URLSearchParams(location.search);
@@ -71,15 +71,8 @@
     document.getElementById('articleTitle').textContent = article.title;
     document.getElementById('articleMeta').textContent = (article.source || '公众号：C4安全') + ' · ' + (article.date || '日期待补充');
 
-    if (article.mdPath) {
-      fetch(article.mdPath)
-        .then(function (r) { return r.text(); })
-        .then(function (md) {
-          document.getElementById('articleBody').innerHTML = mdToHtml(md);
-        })
-        .catch(function () {
-          document.getElementById('articleBody').textContent = (article.summary || '正文加载失败。');
-        });
+    if (article.content) {
+      document.getElementById('articleBody').innerHTML = mdToHtml(article.content);
     } else {
       document.getElementById('articleBody').textContent = (article.summary || '正文内容正在整理中。');
     }
