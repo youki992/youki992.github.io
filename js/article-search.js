@@ -100,7 +100,7 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function initArticleSearch() {
     var input = document.getElementById('articleSearchInput');
     var btn = document.getElementById('articleSearchBtn');
     var tags = document.querySelectorAll('.search-tag');
@@ -125,5 +125,11 @@
         doSearch(t);
       });
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initArticleSearch);
+  } else {
+    initArticleSearch();
+  }
 })();
