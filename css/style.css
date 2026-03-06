@@ -1017,3 +1017,190 @@ body.mobile-nav-active #mobile-nav-toggle {
   font-size: 13px;
   color: #ccc;
 }
+
+/* ==================================================
+   2026 refresh theme (keep content, upgrade visual)
+   Inspired by modern cyber security team sites
+   ================================================== */
+:root {
+  --c4-bg: #070b14;
+  --c4-bg-soft: #0f172a;
+  --c4-panel: #111827;
+  --c4-text: #dbe7ff;
+  --c4-muted: #93a4c9;
+  --c4-primary: #22d3ee;
+  --c4-primary-2: #6366f1;
+  --c4-accent: #10b981;
+}
+
+body {
+  background: radial-gradient(1200px 700px at 10% -10%, #1e293b 0%, #0b1220 42%, #060a12 100%);
+  color: var(--c4-text);
+}
+
+#preloader {
+  background: #070b14 url("../img/preloader.svg") no-repeat center center;
+}
+
+a {
+  color: var(--c4-primary);
+}
+
+a:hover,
+a:active,
+a:focus {
+  color: #67e8f9;
+}
+
+#hero {
+  background: linear-gradient(135deg, rgba(15, 23, 42, .92), rgba(17, 24, 39, .75)), url(../img/hero-bg.jpg) top center fixed;
+  background-size: cover;
+}
+
+#hero .hero-container {
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+#hero h1 {
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px rgba(34, 211, 238, .25);
+}
+
+#hero h2 {
+  color: #c6d4f4;
+}
+
+#hero .btn-get-started,
+#hero .btn-services {
+  border-radius: 999px;
+  padding: 10px 24px;
+}
+
+#hero .btn-get-started {
+  background: linear-gradient(135deg, var(--c4-primary), var(--c4-primary-2));
+  border-color: transparent;
+}
+
+#hero .btn-services {
+  border: 1px solid rgba(148, 163, 184, .6);
+  background: rgba(15, 23, 42, .45);
+}
+
+#hero .btn-services:hover {
+  background: rgba(14, 165, 233, .2);
+  border-color: #38bdf8;
+}
+
+#header {
+  background: rgba(2, 6, 23, .78);
+  border-bottom: 1px solid rgba(56, 189, 248, .22);
+}
+
+.is-sticky #header {
+  background: rgba(2, 6, 23, .92);
+}
+
+.nav-menu a {
+  color: #dbe7ff;
+}
+
+.nav-menu li:hover > a,
+.nav-menu > .menu-active > a {
+  color: #67e8f9;
+}
+
+#about,
+#testimonials,
+#Dabout,
+#partner,
+#subscribe,
+#portfolio,
+#safe_attack {
+  background: transparent !important;
+  color: var(--c4-text);
+}
+
+.section-title {
+  color: #e2ecff;
+  font-weight: 700;
+  letter-spacing: .6px;
+}
+
+.section-title-divider {
+  width: 88px;
+  height: 3px;
+  background: linear-gradient(135deg, var(--c4-primary), var(--c4-primary-2));
+  border-bottom: none;
+  margin: 0 auto 20px;
+  border-radius: 999px;
+}
+
+.section-description,
+.about-text,
+p,
+.member-row td p,
+.left-desc {
+  color: var(--c4-muted);
+}
+
+.about-title {
+  color: #f1f5ff;
+  margin-top: 28px;
+}
+
+.pic img,
+.partner img,
+.member-avatar,
+.certificate-image,
+.testimonial-item img {
+  border-radius: 12px;
+  box-shadow: 0 10px 26px rgba(2, 6, 23, .4);
+}
+
+.pic img:hover,
+.partner img:hover,
+.member-avatar:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.member-row {
+  background: rgba(17, 24, 39, .78) !important;
+  border-bottom: 1px solid rgba(51, 65, 85, .8);
+}
+
+.member-row:hover {
+  background: rgba(30, 41, 59, .86) !important;
+}
+
+.separator {
+  background: rgba(71, 85, 105, .5);
+}
+
+.left-btn,
+.btn {
+  border-radius: 999px !important;
+}
+
+#footer,
+footer {
+  background: rgba(2, 6, 23, .86);
+  border-top: 1px solid rgba(30, 41, 59, 1);
+}
+
+@media (max-width: 768px) {
+  #hero h1 {
+    font-size: 30px;
+  }
+
+  #header {
+    padding: 14px 0;
+  }
+}
+
+/* fix legacy inline font colors on dark theme */
+font[color="00000"],
+font[color="#00000"],
+font[color="#000000"] {
+  color: #e8eeff !important;
+}
