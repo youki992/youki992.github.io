@@ -1401,6 +1401,45 @@ font[color="#000000"] {
   margin-right: 8px;
 }
 
+#safe_attack .attack-btn {
+  display: inline-block;
+  min-width: 320px;
+  padding: 12px 20px;
+  border-radius: 14px !important;
+  border: 1px solid rgba(148, 163, 184, .35);
+  color: #f8fafc !important;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 22px rgba(2, 6, 23, .45);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+#safe_attack .attack-btn:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, .6);
+  filter: saturate(1.12);
+}
+
+#safe_attack .attack-btn--entry {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+#safe_attack .attack-btn--xss {
+  background: linear-gradient(135deg, #fb7185, #ef4444);
+}
+
+#safe_attack .attack-btn--bee {
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+#safe_attack .attack-btn--knight {
+  background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+}
+
 @media (max-width: 850px) {
   #heroCarousel .hero-slide {
     height: 88vh;
