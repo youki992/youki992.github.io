@@ -6,7 +6,7 @@
   <title>C4安全 - 文章详情</title>
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="css/style.css?v=20260306-0253" rel="stylesheet" />
+  <link href="css/style.css?v=20260306-0300" rel="stylesheet" />
   <style>
     .article-page-wrap { max-width: 980px; margin: 110px auto 40px; padding: 0 14px; }
     .article-box { background: rgba(15,23,42,.68); border: 1px solid rgba(71,85,105,.55); border-radius: 14px; padding: 22px; }
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<script src="js/articles-data.js?v=20260306-0253"></script>
+<script src="js/articles-data.js?v=20260306-0300"></script>
 <script>
 (function () {
   var params = new URLSearchParams(location.search);
@@ -66,19 +66,47 @@
     return text;
   }
 
-  if (article) {
-    document.title = article.title + ' - C4安全';
-    document.getElementById('articleTitle').textContent = article.title;
-    document.getElementById('articleMeta').textContent = (article.source || '公众号：C4安全') + ' · ' + (article.date || '日期待补充');
-
-    if (article.content) {
-      document.getElementById('articleBody').innerHTML = mdToHtml(article.content);
+  function renderArticle(a) {
+    document.title = a.title + ' - C4安全';
+    document.getElementById('articleTitle').textContent = a.title;
+    document.getElementById('articleMeta').textContent = (a.source || '公众号：C4安全') + ' · ' + (a.date || '日期待补充');
+    if (a.content) {
+      document.getElementById('articleBody').innerHTML = mdToHtml(a.content);
     } else {
-      document.getElementById('articleBody').textContent = (article.summary || '正文内容正在整理中。');
+      document.getElementById('articleBody').textContent = (a.summary || '正文内容正在整理中。');
+    }
+  }
+
+  function loadLatestAndRender(fallbackTitle) {
+    var bust = Date.now();
+    fetch('js/articles-data.js?v=' + bust)
+      .then(function (r) { return r.text(); })
+      .then(function (txt) {
+        var jsonText = txt.replace(/^\s*window\.C4_ARTICLES\s*=\s*/, '').replace(/;\s*$/, '');
+        var arr = JSON.parse(jsonText);
+        var byId = arr.find(function (x) { return Number(x.id) === id; });
+        var byTitle = fallbackTitle ? arr.find(function (x) { return x.title === fallbackTitle; }) : null;
+        var fresh = byId || byTitle;
+        if (fresh) {
+          renderArticle(fresh);
+        } else {
+          document.getElementById('articleBody').textContent = '正文暂未同步到最新索引。';
+        }
+      })
+      .catch(function () {
+        document.getElementById('articleBody').textContent = '正文加载失败，请稍后刷新重试。';
+      });
+  }
+
+  if (article) {
+    if (article.content) {
+      renderArticle(article);
+    } else {
+      renderArticle(article);
+      loadLatestAndRender(article.title);
     }
   } else {
-    document.getElementById('articleTitle').textContent = '未找到文章';
-    document.getElementById('articleBody').textContent = '文章不存在或编号错误。';
+    loadLatestAndRender('');
   }
 
   var btn = document.getElementById('themeToggleBtn');
