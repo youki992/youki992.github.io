@@ -8,6 +8,18 @@
       .replace(/'/g, '&#39;');
   }
 
+  function getCoverUrl(article) {
+    var content = String((article && article.content) || '');
+
+    var coverMatch = content.match(/!\[\s*cover_image\s*\]\(([^)]+)\)/i);
+    if (coverMatch && coverMatch[1]) return coverMatch[1].trim();
+
+    var firstImageMatch = content.match(/!\[[^\]]*\]\(([^)]+)\)/);
+    if (firstImageMatch && firstImageMatch[1]) return firstImageMatch[1].trim();
+
+    return '';
+  }
+
   function renderList(items) {
     var box = document.getElementById('articleResultsList');
     if (!box) return;
@@ -23,7 +35,13 @@
 
       var source = esc(a.source || '公众号：C4安全');
       var date = esc(a.date || '日期待补充');
+      var coverUrl = getCoverUrl(a);
+      var cover = coverUrl
+        ? '<div class="article-cover"><img loading="lazy" src="' + esc(coverUrl) + '" alt="' + esc(a.title || '文章封面') + '"></div>'
+        : '';
+
       return '<a class="article-card" href="' + esc(a.url) + '">' +
+        cover +
         '<h4>' + esc(a.title) + '</h4>' +
         '<p>' + esc(a.summary || '') + '</p>' +
         '<div class="article-meta">' + source + ' · ' + date + '</div>' +

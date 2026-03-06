@@ -1741,6 +1741,20 @@ font[color="#000000"] {
   border-color: rgba(56, 189, 248, .6);
 }
 
+.article-cover {
+  width: calc(100% + 28px);
+  margin: -14px -14px 10px;
+  border-bottom: 1px solid rgba(71, 85, 105, .45);
+  background: rgba(2, 6, 23, .35);
+}
+
+.article-cover img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
 /* global light mode overrides */
 .theme-light body,
 .theme-light #about,
@@ -1825,4 +1839,9 @@ font[color="#000000"] {
 
 .theme-light .article-meta {
   color: #64748b;
+}
+
+.theme-light .article-cover {
+  border-bottom-color: #dbe2f2;
+  background: #f8fafc;
 }
