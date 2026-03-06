@@ -1204,3 +1204,106 @@ font[color="#00000"],
 font[color="#000000"] {
   color: #e8eeff !important;
 }
+
+/* ===== 2026-03 hero + partner readability patch ===== */
+#hero .hero-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(103, 232, 249, .35);
+  border-radius: 999px;
+  color: #b8f3ff;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  margin-bottom: 12px;
+  background: rgba(14, 116, 144, .18);
+}
+
+#hero .hero-subline {
+  color: #afc6ef;
+  margin: -24px 0 22px;
+  font-size: 15px;
+  letter-spacing: .4px;
+}
+
+#hero .hero-stats {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto 22px;
+  max-width: 920px;
+}
+
+#hero .hero-stat {
+  min-width: 190px;
+  background: rgba(15, 23, 42, .45);
+  border: 1px solid rgba(100, 116, 139, .35);
+  border-radius: 12px;
+  padding: 10px 14px;
+  backdrop-filter: blur(2px);
+}
+
+#hero .hero-stat b {
+  display: block;
+  color: #ffffff;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+#hero .hero-stat span {
+  color: #b5c7e9;
+  font-size: 12px;
+}
+
+#partner {
+  background: linear-gradient(180deg, rgba(2, 6, 23, .05), rgba(2, 6, 23, .35)) !important;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+#partner .partner-title {
+  color: #e8eeff;
+  margin-bottom: 26px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+#partner .partners-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 18px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#partner .partner {
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, .35);
+  border-radius: 14px;
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 26px rgba(2, 6, 23, .28);
+  padding: 14px;
+}
+
+#partner .partner img {
+  max-width: 82%;
+  max-height: 72px;
+  object-fit: contain;
+  filter: none !important;
+}
+
+@media (max-width: 900px) {
+  #partner .partners-container {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+
+  #hero .hero-subline {
+    margin-top: -10px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+}
