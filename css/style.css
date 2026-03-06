@@ -1164,6 +1164,16 @@ p,
   transform: translateY(-3px) scale(1.04);
 }
 
+.mysterious-avatar {
+  filter: grayscale(1) contrast(1.15) brightness(.72) blur(1.8px);
+  image-rendering: pixelated;
+  position: relative;
+}
+
+.mysterious-avatar:hover {
+  filter: grayscale(1) contrast(1.2) brightness(.68) blur(2.3px);
+}
+
 .member-row {
   background: rgba(17, 24, 39, .78) !important;
   border-bottom: 1px solid rgba(51, 65, 85, .8);
