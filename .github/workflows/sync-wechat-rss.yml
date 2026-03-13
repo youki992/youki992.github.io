@@ -12,21 +12,37 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Check RSS config
+        id: cfg
+        env:
+          WECHAT_RSS_URL: ${{ secrets.WECHAT_RSS_URL }}
+        run: |
+          if [ -z "$WECHAT_RSS_URL" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "WECHAT_RSS_URL missing, skip silently."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
+        if: steps.cfg.outputs.enabled == 'true'
         uses: actions/checkout@v4
 
       - name: Setup Python
+        if: steps.cfg.outputs.enabled == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Sync RSS -> js/articles-data.js
+        if: steps.cfg.outputs.enabled == 'true'
         env:
           WECHAT_RSS_URL: ${{ secrets.WECHAT_RSS_URL }}
         run: |
           python scripts/sync_rss_to_articles.py
 
       - name: Commit and push
+        if: steps.cfg.outputs.enabled == 'true'
         run: |
           if git diff --quiet; then
             echo "No changes"
